@@ -29,6 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late TextEditingController nameController;
   late TextEditingController emailController;
   late TextEditingController passController;
+  late TextEditingController numbController;
   late TextEditingController repassController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -39,6 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     emailController = TextEditingController();
     passController = TextEditingController();
     repassController = TextEditingController();
+    numbController = TextEditingController();
   }
 
   @override
@@ -49,6 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     emailController.dispose();
     passController.dispose();
     repassController.dispose();
+    numbController.dispose();
   }
 
   @override
@@ -81,6 +84,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   hint: StringsManger.enterName.tr(),
                   prefixIcon: AssetsManger.user,
                   keyboardType: TextInputType.name,
+                ),
+                SizedBox(height: 16.h),
+                CustomTextField(
+                  validate: (value) {
+                    if (value == null || value.isEmpty|| value.length != 11) {
+                      return StringsManger.wrong.tr();
+                    }
+                    return null;
+                  },
+                  controller: numbController,
+                  hint: StringsManger.enterNumber.tr(),
+                  prefixIcon: AssetsManger.number,
+                  keyboardType: TextInputType.number,
                 ),
                 SizedBox(height: 16.h),
                 CustomTextField(
@@ -147,6 +163,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           id: credential.user?.uid,
           name: nameController.text,
           email: emailController.text,
+          number: numbController.text
         ),
       );
       MyUser.User? myUser = await FirestoreHandler.getUser(

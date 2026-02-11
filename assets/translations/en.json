@@ -20,5 +20,13 @@
   "weakPass": "Password is weak",
   "resetPass": "Reset Password",
   "resetLinkSent": "Reset link sent",
-  "noUserAcc": " No user account"
+  "noUserAcc": " No user account",
+  "home": "Homer",
+  "map": "Map",
+  "calender": "Calender",
+  "profile": "Profile",
+  "userLocation": "User Location",
+  "pharmaLocations": "Pharmacy Location",
+  "enterNumb": "Enter your phone number ",
+  "logout": "Logout"
 }

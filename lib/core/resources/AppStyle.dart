@@ -20,15 +20,36 @@ class AppStyle {
       ),
       labelMedium: TextStyle(
         fontSize: 16.sp,
-        color:ColorManger.green,
-        fontWeight: FontWeight.w600
+        color: ColorManger.green,
+        fontWeight: FontWeight.w600,
       ),
 
-        titleMedium: TextStyle(
+      titleMedium: TextStyle(
         fontSize: 16.sp,
-        color:ColorManger.black,
-        fontWeight: FontWeight.w700
-      )
+        color: ColorManger.black,
+        fontWeight: FontWeight.w700,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 35.sp,
+        color: ColorManger.white,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: ColorManger.white,
+      type: BottomNavigationBarType.fixed,
+      selectedItemColor: ColorManger.green,
+      unselectedItemColor: ColorManger.white,
+      selectedLabelStyle: TextStyle(
+        fontWeight: FontWeight.w700,
+        color: ColorManger.green,
+        fontSize: 12.sp,
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontWeight: FontWeight.w700,
+        color: ColorManger.white,
+        fontSize: 12.sp,
+      ),
     ),
   );
 }
