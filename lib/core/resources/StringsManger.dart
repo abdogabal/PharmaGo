@@ -4,4 +4,21 @@ abstract final class StringsManger {
   static const String onboarding2 ='onboarding2';
   static const String onboarding3 ='onboarding3';
   static const String skip ='skip';
+  static const String login ='login';
+  static const String signup ='signup';
+  static const String enterEmail ='enterEmail';
+  static const String enterPass ='enterPass';
+  static const String forgetPass ='forgetPass';
+  static const String haveAcc ='haveAcc';
+  static const String withGoogle ='withGoogle';
+  static const String passWrong ='passWrong';
+  static const String enterName ='enterName';
+  static const String wrong ='wrong';
+  static const String or ='or';
+  static const String ok ='ok';
+  static const String accExist ='accExist';
+  static const String weakPass ='weakPass';
+  static const String resetPass ='resetPass';
+  static const String resetLinkSent ='resetLinkSent';
+  static const String noUserAcc ='noUserAcc';
 }

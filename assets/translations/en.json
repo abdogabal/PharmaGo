@@ -3,5 +3,22 @@
   "onboarding1": "Speak with confidence  our AI-powered medical app is here for you",
   "onboarding2": "Find nearby pharmacies and get your medicine easily.",
   "onboarding3": "Connect with top hospitals for advanced care.",
-  "skip": "Skip"
+  "skip": "Skip",
+  "login": "Login",
+  "signup": "Sign Up",
+  "enterEmail": "Enter your email",
+  "enterPass": "Enter your password",
+  "forgetPass": "Forgot Password?",
+  "haveAcc": "Don’t have an account?",
+  "withGoogle": "Sign in with Google",
+  "passWrong": "*The password you entered is wrong",
+  "enterName": "Enter your name",
+  "wrong": "Something wrong",
+  "or": "Or",
+  "ok": "Ok",
+  "accExist": "Account already exist",
+  "weakPass": "Password is weak",
+  "resetPass": "Reset Password",
+  "resetLinkSent": "Reset link sent",
+  "noUserAcc": " No user account"
 }

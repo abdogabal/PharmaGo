@@ -48,7 +48,7 @@ dependencies:
   geocoding: ^4.0.0
   intl: ^0.20.2
   fluttertoast: ^9.0.0
-  google_sign_in: ^7.2.0
+  google_sign_in: ^6.3.0
   flutter_screenutil: ^5.9.3
   smooth_page_indicator: ^2.0.1
 

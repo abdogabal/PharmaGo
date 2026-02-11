@@ -18,6 +18,17 @@ class AppStyle {
         fontWeight: FontWeight.w400,
         color: ColorManger.green,
       ),
+      labelMedium: TextStyle(
+        fontSize: 16.sp,
+        color:ColorManger.green,
+        fontWeight: FontWeight.w600
+      ),
+
+        titleMedium: TextStyle(
+        fontSize: 16.sp,
+        color:ColorManger.black,
+        fontWeight: FontWeight.w700
+      )
     ),
   );
 }
