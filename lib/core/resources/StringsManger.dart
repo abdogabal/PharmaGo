@@ -29,4 +29,13 @@ abstract final class StringsManger {
   static const String userLocation = 'userLocation';
   static const String pharmaLocations = 'eventLocations';
   static const String logout = 'logout';
+  static const String pharmacies = 'pharmacies';
+  static const String noPharma = 'noPharma';
+  static const String orders = 'orders';
+  static const String add = 'add';
+  static const String edit = 'edit';
+  static const String medName = 'medName';
+  static const String price = 'price';
+  static const String quantity = 'quantity';
+  static const String success = 'success';
 }

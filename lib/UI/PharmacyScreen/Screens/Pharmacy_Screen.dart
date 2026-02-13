@@ -1,20 +1,29 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:pharmago/UI/Home/Tabs/Home/widget/Pharmaitems.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../Core/resources/StringsManger.dart';
-import '../../../../core/FirestoreHandler.dart';
+import '../../../Core/resources/StringsManger.dart';
+import '../../../Models/Pharmacies.dart';
+import '../../../Providers/DetailsProvider.dart';
+import '../../../Providers/UserProvider.dart';
+import '../../../core/FirestoreHandler.dart';
+import '../../Home/Tabs/Home/widget/Pharmaitems.dart';
+import '../widgets/MedicItems.dart';
 
-class HomeTab extends StatefulWidget {
-  const HomeTab({super.key});
-
+class PharmacyScreen extends StatefulWidget {
+  const PharmacyScreen({super.key});
+  static const String routeName = 'PharmaScreen';
   @override
-  State<HomeTab> createState() => _HomeTabState();
+  State<PharmacyScreen> createState() => _PharmacyScreenState();
 }
 
-class _HomeTabState extends State<HomeTab> {
+class _PharmacyScreenState extends State<PharmacyScreen> {
+late Pharma pharma;
   @override
   Widget build(BuildContext context) {
+    UserProvider provider = Provider.of<UserProvider>(context);
+    DetailsProvider detailsProvider = Provider.of<DetailsProvider>(context);
+    pharma = ModalRoute.of(context)!.settings.arguments as Pharma;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -24,7 +33,7 @@ class _HomeTabState extends State<HomeTab> {
         ),
       ),
       body: StreamBuilder(
-        stream: FirestoreHandler.getAllPharmaStream(),
+        stream: FirestoreHandler.getAllMedicStream(pharma.id??''),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -42,8 +51,8 @@ class _HomeTabState extends State<HomeTab> {
               ],
             );
           }
-          var Pharma = snapshot.data ?? [];
-          if (Pharma.isEmpty) {
+          var medic = snapshot.data ?? [];
+          if (medic.isEmpty) {
             return Center(
               child: Text(
                 StringsManger.noPharma,
@@ -54,13 +63,13 @@ class _HomeTabState extends State<HomeTab> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ListView.separated(
-              itemBuilder: (context, index) => PharmaItems(Pharma[index]),
+              itemBuilder: (context, index) => MedicItems(medic[index]),
               separatorBuilder: (context, index) => SizedBox(height: 16),
-              itemCount: Pharma.length,
+              itemCount: medic.length,
             ),
           );
         },
       ),
-    );
+    );;
   }
 }

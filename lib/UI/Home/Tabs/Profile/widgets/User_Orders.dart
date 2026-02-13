@@ -1,20 +1,24 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:pharmago/UI/Home/Tabs/Home/widget/Pharmaitems.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../Core/resources/StringsManger.dart';
-import '../../../../core/FirestoreHandler.dart';
+import '../../../../../Core/resources/StringsManger.dart';
+import '../../../../../Providers/UserProvider.dart';
+import '../../../../../core/FirestoreHandler.dart';
+import 'User_Order_Item.dart';
 
-class HomeTab extends StatefulWidget {
-  const HomeTab({super.key});
+class UserOrders extends StatefulWidget {
+  static const String routeName = 'UserOrder';
+  const UserOrders({super.key});
 
   @override
-  State<HomeTab> createState() => _HomeTabState();
+  State<UserOrders> createState() => _UserOrdersState();
 }
 
-class _HomeTabState extends State<HomeTab> {
+class _UserOrdersState extends State<UserOrders> {
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -24,7 +28,7 @@ class _HomeTabState extends State<HomeTab> {
         ),
       ),
       body: StreamBuilder(
-        stream: FirestoreHandler.getAllPharmaStream(),
+        stream: FirestoreHandler.getUserOrdersStream(userProvider.myUser?.id??''),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -42,8 +46,8 @@ class _HomeTabState extends State<HomeTab> {
               ],
             );
           }
-          var Pharma = snapshot.data ?? [];
-          if (Pharma.isEmpty) {
+          var order = snapshot.data ?? [];
+          if (order.isEmpty) {
             return Center(
               child: Text(
                 StringsManger.noPharma,
@@ -54,9 +58,9 @@ class _HomeTabState extends State<HomeTab> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ListView.separated(
-              itemBuilder: (context, index) => PharmaItems(Pharma[index]),
+              itemBuilder: (context, index) => UserOrderItem(order[index]),
               separatorBuilder: (context, index) => SizedBox(height: 16),
-              itemCount: Pharma.length,
+              itemCount: order.length,
             ),
           );
         },

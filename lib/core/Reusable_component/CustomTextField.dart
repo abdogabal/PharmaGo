@@ -19,7 +19,7 @@ class CustomTextField extends StatefulWidget {
     required this.prefixIcon,
     required this.keyboardType,
     this.obscure = false,
-    this.lines=1
+    this.lines=1,
   });
 
   @override
@@ -43,10 +43,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
       validator: widget.validate,
       controller: widget.controller,
       obscureText: isVisible,
+
       obscuringCharacter: '*',
       style: Theme.of(context).textTheme.titleMedium,
       keyboardType: widget.keyboardType,
       decoration: InputDecoration(
+
         hintText: widget.hint,
         hintStyle: Theme.of(context).textTheme.labelMedium,
 

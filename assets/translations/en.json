@@ -21,12 +21,21 @@
   "resetPass": "Reset Password",
   "resetLinkSent": "Reset link sent",
   "noUserAcc": " No user account",
-  "home": "Homer",
+  "home": "Home",
   "map": "Map",
   "calender": "Calender",
   "profile": "Profile",
   "userLocation": "User Location",
   "pharmaLocations": "Pharmacy Location",
   "enterNumb": "Enter your phone number ",
-  "logout": "Logout"
+  "pharmacies": "Pharmacies",
+  "noPharma ": "No Pharmacies",
+  "orders": "Orders",
+  "add": "Add",
+  "edit": "Edit",
+  "logout": "Logout",
+  "quantity": "Quantity",
+  "medName": "Enter Medicine name",
+  "price": "Price",
+  "success": "Success"
 }

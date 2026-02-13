@@ -4,14 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import 'Providers/DetailsProvider.dart';
 import 'Providers/MapPickerProvider.dart';
 import 'Providers/MapsProvider.dart';
 import 'Providers/ThemeProvider.dart';
 import 'Providers/UserProvider.dart';
 import 'UI/ForgetPassword/Screens/Forget_Password.dart';
 import 'UI/Home/Screens/Home_Screen.dart';
+import 'UI/Home/Tabs/Pharma_Home/widgets/Add_Screen.dart';
+import 'UI/Home/Tabs/Pharma_Home/widgets/Edit_Screen.dart';
+import 'UI/Home/Tabs/Profile/widgets/User_Orders.dart';
 import 'UI/Login/Screens/Login_Screen.dart';
 import 'UI/Onboarding/Screens/Onboarding_Screen.dart';
+import 'UI/PharmacyScreen/Screens/Pharmacy_Screen.dart';
 import 'UI/Signup/screens/SignUp_Screen.dart';
 import 'UI/splash/screens/splash_screen.dart';
 import 'core/PrefsManager.dart';
@@ -35,7 +40,8 @@ void main() async {
           ChangeNotifierProvider(create: (context) => UserProvider()),
           ChangeNotifierProvider(create: (context) => ThemeProviders()..init()),
           ChangeNotifierProvider(create: (context) => MapsProvider()),
-          ChangeNotifierProvider(create: (context) => MapPickerProvider())
+          ChangeNotifierProvider(create: (context) => MapPickerProvider()),
+          ChangeNotifierProvider(create: (context) => DetailsProvider()),
         ],
         child: MyApp(),
       ),
@@ -67,6 +73,10 @@ class MyApp extends StatelessWidget {
             LoginScreen.routeName: (_)=>LoginScreen(),
             SignUpScreen.routeName: (_)=>SignUpScreen(),
             ForgetPassword.routeName: (_)=>ForgetPassword(),
+            PharmacyScreen.routeName: (_)=>PharmacyScreen(),
+            UserOrders.routeName: (_)=>UserOrders(),
+            AddScreen.routeName: (_)=>AddScreen(),
+            EditScreen.routeName: (_)=>EditScreen()
           },
           initialRoute: SplashScreen.routeName,
         );

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +9,8 @@ import 'package:pharmago/core/resources/AssetsManger.dart';
 import 'package:pharmago/core/resources/ColorManger.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../Providers/UserProvider.dart';
+import '../../../../../Providers/UserProvider.dart';
+import '../widgets/User_Orders.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
@@ -100,9 +102,44 @@ class _ProfileTabState extends State<ProfileTab> {
                         ),
                       ],
                     ),
+                    Visibility(
+                      visible:  userProvider.myUser?.pharmacy==false,
+                      child: Expanded(
+                        child: Divider(height: 20.h, color: ColorManger.black),
+                      ),
+                    ),
+                    Visibility(
+                      visible:  userProvider.myUser?.pharmacy==false,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(Icons.history, color: ColorManger.green),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  UserOrders.routeName,
+                                );
+                              },
+                              child: Align(
+                                alignment: AlignmentDirectional.centerStart,
+                                child: Text(
+                                  StringsManger.orders.tr(),
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
                     Expanded(
                       child: Divider(height: 20.h, color: ColorManger.black),
                     ),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -112,7 +149,11 @@ class _ProfileTabState extends State<ProfileTab> {
                           child: TextButton(
                             onPressed: () {
                               FirebaseAuth.instance.signOut();
-                              Navigator.pushNamedAndRemoveUntil(context, LoginScreen.routeName, (route) => false,);
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                LoginScreen.routeName,
+                                (route) => false,
+                              );
                             },
                             child: Align(
                               alignment: AlignmentDirectional.centerStart,
