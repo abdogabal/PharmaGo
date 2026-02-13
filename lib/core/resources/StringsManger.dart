@@ -27,7 +27,7 @@ abstract final class StringsManger {
   static const String calendar = 'calendar';
   static const String profile = 'profile';
   static const String userLocation = 'userLocation';
-  static const String pharmaLocations = 'eventLocations';
+  static const String pharmaLocations = 'pharmaLocations';
   static const String logout = 'logout';
   static const String pharmacies = 'pharmacies';
   static const String noPharma = 'noPharma';
@@ -38,4 +38,7 @@ abstract final class StringsManger {
   static const String price = 'price';
   static const String quantity = 'quantity';
   static const String success = 'success';
+  static const String noMedic = 'noMedic';
+  static const String searchMedic = 'searchMedic';
+  static const String searchPharma = 'searchPharma';
 }

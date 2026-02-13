@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pharmago/Models/Order.dart';
+import 'package:pharmago/core/FirestoreHandler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../Providers/DetailsProvider.dart';
@@ -38,13 +39,21 @@ class _OrderItemState extends State<OrderItem> {
                 Expanded(
                   child: Text(
                     widget.order.id!,
+
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                       color: ColorManger.black,
+                      decoration: widget.order.finish??false?TextDecoration.lineThrough:null,  // Line through the text
+                      decorationColor: ColorManger.black,
+                      decorationThickness: 2.0,
+
                     ),
                   ),
                 ),
+                Checkbox(value: widget.order.finish, onChanged: (value) {
+                  FirestoreHandler.checkOrder(value??false, widget.order.id??'');
+                },)
               ],
             ),
           ),

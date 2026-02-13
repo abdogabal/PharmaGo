@@ -1,11 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pharmago/UI/PharmacyScreen/Screens/Pharmacy_Screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../Core/resources/StringsManger.dart';
 import '../../../../Providers/MapsProvider.dart';
 import '../../../../core/FirestoreHandler.dart';
 import '../../../../core/resources/ColorManger.dart';
+import '../Home/widget/Pharmaitems.dart';
 
 class MapTab extends StatefulWidget {
   const MapTab({super.key});
@@ -34,60 +37,59 @@ class _MapTabState extends State<MapTab> {
         },
       ),
       body: Stack(
-        alignment:Alignment.bottomCenter,
         children: [
-          Column(
-            children: [
-              Expanded(
-                child: GoogleMap(
-                  initialCameraPosition: provider.cameraPosition,
-                  onMapCreated: (controller) {
-                    provider.googleMapController = controller;
-                  },
-                  mapType: MapType.normal,
-                  markers: provider.markers,
-                ),
-              ),
-            ],
+          GoogleMap(
+            initialCameraPosition: provider.cameraPosition,
+            onMapCreated: (controller) {
+              provider.googleMapController = controller;
+            },
+            mapType: MapType.normal,
+            markers: provider.markers,
+            onTap: (LatLng position) {
+              provider.clearSelectedPharma();  // Close the bottom card on map tap
+            },
           ),
-          /*StreamBuilder(
-            stream: FirestoreHandler.getAllEventsStream(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (snapshot.hasError) {
-                return Column(
-                  children: [
-                    Text(snapshot.error.toString()),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text(StringsManger.tryAgain),
-                    ),
-                  ],
-                );
-              }
-              var events = snapshot.data ?? [];
-              if (events.isEmpty) {
-                return Center(
-                  child: Text(
-                    StringsManger.noEvent,
-                    style: Theme.of(context).textTheme.bodySmall,
+
+          Consumer<MapsProvider>(
+            builder: (context, provider, _) {
+              if (provider.selectedPharma == null) return SizedBox();
+
+              final pharma = provider.selectedPharma!;
+
+              return Positioned(
+                bottom: 16,
+                left: 16,
+                right: 16,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                );
-              }
-              return Container(
-                height: 100,
-                margin: EdgeInsets.symmetric(horizontal: 16.0,vertical: 32),
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) =>MapEventItems(events[index]),
-                  separatorBuilder: (context, index) => SizedBox(width: 10),
-                  itemCount: events.length,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          pharma.title ?? '',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(pharma.phone ?? ''),
+                        const SizedBox(height: 12),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, PharmacyScreen.routeName,arguments:pharma);
+                          },
+                          child: Text(StringsManger.pharmacies.tr()),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               );
             },
-          ),*/
+          ),
         ],
       ),
     );

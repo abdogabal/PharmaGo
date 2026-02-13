@@ -144,6 +144,40 @@ class FirestoreHandler {
     return document.set(order);
   }
 
+  static CollectionReference<Medic> getMedicOrderCollection(String order) {
+    var collection = FirebaseFirestore.instance
+        .collection("Orders")
+        .doc(order)
+        .collection('medicines')
+        .withConverter(
+          fromFirestore: (snapshot, options) {
+            Map<String, dynamic>? data = snapshot.data();
+            return Medic.fromFireStore(data);
+          },
+          toFirestore: (medic, options) {
+            return medic.toFireStore();
+          },
+        );
+    return collection;
+  }
+
+  static Future<void> addMedicOrder(Medic medic, String orders) {
+    var collection = getMedicOrderCollection(orders);
+    var document = collection.doc();
+    medic.id = document.id;
+    return document.set(medic);
+  }
+
+  static Future<void> makeOrder(
+    pharmaOrder.Order order,
+    List<Medic> medicines,
+  ) async {
+    await addOrder(order);
+    for (int i=0;i<medicines.length;i++) {
+      addMedicOrder(medicines[i], order.id??'');
+    }
+  }
+
   static Future<void> addMedic(Medic medic, String pharmacy) {
     var collection = getMedicCollection(pharmacy);
     var document = collection.doc();
@@ -159,5 +193,11 @@ class FirestoreHandler {
       "quantity": medic.quantity,
       "price": medic.price,
     }));
+  }
+
+  static Future<void> checkOrder(bool finish, String id) {
+    var collection = getPharmaOrderCollection();
+    var document = collection.doc(id);
+    return document.update(({"finish": finish}));
   }
 }

@@ -21,7 +21,6 @@ class _PharmaItemsState extends State<PharmaItems> {
     DetailsProvider detailsProvider= Provider.of<DetailsProvider>(context);
     return InkWell(
       onTap: (){
-        print('a7a');
         //detailsProvider.getPharmaLocation(widget.pharma.latitude!, widget.pharma.longitude!);
         Navigator.pushNamed(context, PharmacyScreen.routeName,arguments: widget.pharma);
       },

@@ -7,6 +7,7 @@ import '../../../Models/Pharmacies.dart';
 import '../../../Providers/DetailsProvider.dart';
 import '../../../Providers/UserProvider.dart';
 import '../../../core/FirestoreHandler.dart';
+import '../../../core/resources/ColorManger.dart';
 import '../../Home/Tabs/Home/widget/Pharmaitems.dart';
 import '../widgets/MedicItems.dart';
 
@@ -18,6 +19,8 @@ class PharmacyScreen extends StatefulWidget {
 }
 
 class _PharmacyScreenState extends State<PharmacyScreen> {
+  String searchQuery = '';
+  bool isSearching = false;
 late Pharma pharma;
   @override
   Widget build(BuildContext context) {
@@ -27,10 +30,44 @@ late Pharma pharma;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title:
+        isSearching
+            ? TextField(
+          onChanged: (value) {
+            setState(() {
+              searchQuery =
+                  value
+                      .toLowerCase(); // Update query (case-insensitive)
+            });
+          },
+          decoration: InputDecoration(
+            hintText: StringsManger.searchPharma.tr(), // Localize if needed
+            border: InputBorder.none,
+            hintStyle: TextStyle(color: ColorManger.green),
+          ),
+          style: TextStyle(color: Colors.black),
+          autofocus: true, // Auto-focus for better UX
+        )
+            : Text(
           StringsManger.pharmacies.tr(),
           style: Theme.of(context).textTheme.titleMedium,
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isSearching = !isSearching;
+                if (!isSearching) {
+                  searchQuery = '';
+                }
+              });
+            },
+            icon:
+            isSearching
+                ? Icon(Icons.close, color: ColorManger.green)
+                : Icon(Icons.search, color: ColorManger.green),
+          ),
+        ],
       ),
       body: StreamBuilder(
         stream: FirestoreHandler.getAllMedicStream(pharma.id??''),
@@ -60,12 +97,25 @@ late Pharma pharma;
               ),
             );
           }
+          final filteredMedicines = medic.where((m) {
+            final name = m.name?.toLowerCase() ?? '';
+            return name.contains(searchQuery);
+          }).toList();
+
+          if (filteredMedicines.isEmpty && searchQuery.isNotEmpty) {
+            return Center(
+              child: Text(
+                StringsManger.noMedic.tr(),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            );
+          }
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ListView.separated(
-              itemBuilder: (context, index) => MedicItems(medic[index]),
+              itemBuilder: (context, index) => MedicItems(filteredMedicines[index]),
               separatorBuilder: (context, index) => SizedBox(height: 16),
-              itemCount: medic.length,
+              itemCount: filteredMedicines.length,
             ),
           );
         },

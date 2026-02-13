@@ -37,5 +37,8 @@
   "quantity": "Quantity",
   "medName": "Enter Medicine name",
   "price": "Price",
-  "success": "Success"
+  "success": "Success",
+  "noMedic": "No medicines match your search",
+  "searchMedic": "Search medicines...",
+  "searchPharma": "Search Pharmacies..."
 }

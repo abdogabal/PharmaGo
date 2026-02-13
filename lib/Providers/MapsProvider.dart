@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+
+import '../Models/Pharmacies.dart';
 
 class MapsProvider extends ChangeNotifier {
   Location location = Location();
@@ -11,12 +14,48 @@ class MapsProvider extends ChangeNotifier {
     zoom: 14.4746,
   );
   Set<Marker> markers = {};
+  Pharma? selectedPharma;
 
   //MapsProvider() {
   //getLocation();
   //   setLocationListener();
   //}
+  Future<void> loadPharmaciesOnMap() async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('Pharmacies').get();
 
+    markers.removeWhere((m) => m.markerId.value != 'user');
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+
+      final lat = (data['latitude'] as num?)?.toDouble();
+      final lng = (data['longitude'] as num?)?.toDouble();
+
+      if (lat == null || lng == null) continue;
+
+      final pharma = Pharma.fromFireStore(data);
+
+      markers.add(
+        Marker(
+          markerId: MarkerId(doc.id),
+          position: LatLng(lat, lng),
+          infoWindow: InfoWindow(title: pharma.title),
+          onTap: () {
+            selectedPharma = pharma;
+            notifyListeners();
+          },
+        ),
+      );
+    }
+
+    notifyListeners();
+  }
+
+  void clearSelectedPharma() {
+    selectedPharma = null;
+    notifyListeners();
+  }
   Future<bool> _getLocationPermission() async {
     PermissionStatus permissionStatus;
     permissionStatus = await location.hasPermission();
@@ -54,9 +93,11 @@ class MapsProvider extends ChangeNotifier {
       target: LatLng(locationData.latitude ?? 0, locationData.longitude ?? 0),
       zoom: 14.4746,
     );
+    markers.removeWhere((m) => m.markerId.value == 'user');
+
     markers.add(
       Marker(
-        markerId: MarkerId('1'),
+        markerId: MarkerId('user'),
         position: LatLng(
           locationData.latitude ?? 0,
           locationData.longitude ?? 0,
@@ -64,6 +105,7 @@ class MapsProvider extends ChangeNotifier {
         infoWindow: InfoWindow(title: 'User Location'),
       ),
     );
+
     googleMapController.animateCamera(
       CameraUpdate.newCameraPosition(cameraPosition),
     );
@@ -85,7 +127,7 @@ class MapsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  changeCameraPosition(double latitude, double longitude,String title) {
+  changeCameraPosition(double latitude, double longitude, String title) {
     cameraPosition = CameraPosition(
       target: LatLng(latitude ?? 0, longitude ?? 0),
       zoom: 14.4746,
