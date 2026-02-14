@@ -46,10 +46,10 @@ class _MapTabState extends State<MapTab> {
             mapType: MapType.normal,
             markers: provider.markers,
             onTap: (LatLng position) {
-              provider.clearSelectedPharma();  // Close the bottom card on map tap
+              provider.clearSelectedPharma();
             },
           ),
-
+          
           Consumer<MapsProvider>(
             builder: (context, provider, _) {
               if (provider.selectedPharma == null) return SizedBox();
@@ -79,7 +79,11 @@ class _MapTabState extends State<MapTab> {
                         const SizedBox(height: 12),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, PharmacyScreen.routeName,arguments:pharma);
+                            Navigator.pushNamed(
+                              context,
+                              PharmacyScreen.routeName,
+                              arguments: pharma,
+                            );
                           },
                           child: Text(StringsManger.pharmacies.tr()),
                         ),

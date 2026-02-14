@@ -31,6 +31,7 @@
   "pharmacies": "Pharmacies",
   "noPharma ": "No Pharmacies",
   "orders": "Orders",
+  "order": "Order",
   "add": "Add",
   "edit": "Edit",
   "logout": "Logout",
@@ -40,5 +41,13 @@
   "success": "Success",
   "noMedic": "No medicines match your search",
   "searchMedic": "Search medicines...",
-  "searchPharma": "Search Pharmacies..."
+  "searchPharma": "Search Pharmacies...",
+  "noPass": "Please enter password",
+  "noEmail": "Please enter email",
+  "noNum": "Please enter phone number",
+  "noName": "Please enter name",
+  "signSuccess": "Sign in successfully",
+  "loginSuccess": "Login successfully",
+  "enter": "Enter",
+  "medicines": "Medicines"
 }

@@ -17,4 +17,5 @@ abstract final class AssetsManger{
   static const String mapSelected ='assets/svg/Map_Pin_selected.svg';
   static const String calendarSelected ='assets/svg/Calendar_selected.svg';
   static const String profileSelected ='assets/svg/Profile_selected.svg';
+  static const String pharmacy ='assets/svg/Pharmacy.svg';
 }

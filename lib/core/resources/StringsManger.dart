@@ -32,6 +32,7 @@ abstract final class StringsManger {
   static const String pharmacies = 'pharmacies';
   static const String noPharma = 'noPharma';
   static const String orders = 'orders';
+  static const String order = 'order';
   static const String add = 'add';
   static const String edit = 'edit';
   static const String medName = 'medName';
@@ -41,4 +42,14 @@ abstract final class StringsManger {
   static const String noMedic = 'noMedic';
   static const String searchMedic = 'searchMedic';
   static const String searchPharma = 'searchPharma';
+  static const String noPass = 'noPass';
+  static const String noEmail = 'noEmail';
+  static const String noName = 'noName';
+  static const String noNum = 'noNum';
+  static const String signSuccess = 'signSuccess';
+  static const String loginSuccess = 'loginSuccess';
+  static const String medicines = 'medicines';
+  static const String enter = 'enter';
+  static const String cart = 'cart';
+  static const String location = 'location';
 }

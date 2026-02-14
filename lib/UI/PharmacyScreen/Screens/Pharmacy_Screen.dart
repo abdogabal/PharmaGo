@@ -92,7 +92,7 @@ late Pharma pharma;
           if (medic.isEmpty) {
             return Center(
               child: Text(
-                StringsManger.noPharma,
+                StringsManger.noPharma.tr(),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             );

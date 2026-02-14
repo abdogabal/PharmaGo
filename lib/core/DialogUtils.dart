@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pharmago/core/resources/ColorManger.dart';
 
@@ -38,7 +39,7 @@ class DialogUtils {
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.grey,
         textColor: ColorManger.black,
-        fontSize: 16.0
+        fontSize: 16.sp
     );
   }
 }
