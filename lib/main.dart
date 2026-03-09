@@ -3,14 +3,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-
 import 'Providers/DetailsProvider.dart';
 import 'Providers/MapPickerProvider.dart';
 import 'Providers/MapsProvider.dart';
 import 'Providers/ThemeProvider.dart';
 import 'Providers/UserProvider.dart';
+import 'Providers/CartProvider.dart';
 import 'UI/ForgetPassword/Screens/Forget_Password.dart';
 import 'UI/Home/Screens/Home_Screen.dart';
+import 'UI/Home/Tabs/Calendar/CalendarTab.dart';
 import 'UI/Home/Tabs/Pharma_Home/widgets/Add_Screen.dart';
 import 'UI/Home/Tabs/Pharma_Home/widgets/Edit_Screen.dart';
 import 'UI/Home/Tabs/Profile/widgets/User_Orders.dart';
@@ -18,8 +19,12 @@ import 'UI/Login/Screens/Login_Screen.dart';
 import 'UI/Onboarding/Screens/Onboarding_Screen.dart';
 import 'UI/PharmacyScreen/Screens/Pharmacy_Screen.dart';
 import 'UI/Signup/screens/SignUp_Screen.dart';
+import 'UI/Home/Tabs/Calendar/remainder_Screen.dart';
 import 'UI/splash/screens/splash_screen.dart';
+import 'UI/Cart/CartScreen.dart';
+import 'UI/Checkout/PaymentScreen.dart';
 import 'core/PrefsManager.dart';
+import 'core/Reusable_component/notification_handler.dart';
 import 'core/resources/AppStyle.dart';
 import 'firebase_options.dart';
 
@@ -28,6 +33,7 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await PrefsManager.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationHandler.init();
   runApp(
     EasyLocalization(
       supportedLocales: [Locale('en'), Locale('ar')],
@@ -42,6 +48,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => MapsProvider()),
           ChangeNotifierProvider(create: (context) => MapPickerProvider()),
           ChangeNotifierProvider(create: (context) => DetailsProvider()),
+          ChangeNotifierProvider(create: (context) => CartProvider()),
         ],
         child: MyApp(),
       ),
@@ -76,7 +83,11 @@ class MyApp extends StatelessWidget {
             PharmacyScreen.routeName: (_)=>PharmacyScreen(),
             UserOrders.routeName: (_)=>UserOrders(),
             AddScreen.routeName: (_)=>AddScreen(),
-            EditScreen.routeName: (_)=>EditScreen()
+            EditScreen.routeName: (_)=>EditScreen(),
+            ScheduledPage.routeName: (_)=>ScheduledPage(),
+            MedicationListScreen.routeName: (_)=>MedicationListScreen(),
+            CartScreen.routeName: (_)=>CartScreen(),
+            PaymentScreen.routeName: (_)=>PaymentScreen(),
           },
           initialRoute: SplashScreen.routeName,
         );

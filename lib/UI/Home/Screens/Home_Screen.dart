@@ -8,7 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pharmago/UI/Home/Tabs/Calendar/CalendarTab.dart';
 import 'package:pharmago/UI/Home/Tabs/Home/HomeTab.dart';
 import 'package:pharmago/UI/Home/Tabs/Pharma_Orders/screens/Pharma_Orders.dart';
-import 'package:pharmago/UI/splash/screens/splash_screen.dart';
 import 'package:pharmago/core/resources/ColorManger.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +17,7 @@ import '../../../Providers/UserProvider.dart';
 import '../../../core/FirestoreHandler.dart';
 import '../../../core/resources/AssetsManger.dart';
 import '../../../core/resources/StringsManger.dart';
+import '../Tabs/Calendar/remainder_Screen.dart';
 import '../Tabs/Map/MapTab.dart';
 import '../Tabs/Pharma_Home/screens/Pharma_Home.dart';
 import '../Tabs/Profile/screens/ProfileTab.dart';
@@ -34,7 +34,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool pharmacy = false;
   int selectedTap = 0;
-  List<Widget> tabs = [HomeTab(), MapTab(), CalendarTab(), ProfileTab()];
+  List<Widget> tabs = [HomeTap(), MapTab(), MedicationListScreen(), ProfileTab()];
   List<Widget> pharmaTabs = [
     PharmaHome(),
     MapTab(),

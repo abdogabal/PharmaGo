@@ -1,11 +1,10 @@
 import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pharmago/Models/Pharmacies.dart';
-
 import '../Models/Medicines.dart';
 import '../Models/User.dart';
 import '../Models/Order.dart' as pharmaOrder;
+
 
 class FirestoreHandler {
   static CollectionReference<User> getUserCollection() {
@@ -80,7 +79,32 @@ class FirestoreHandler {
   }
 
   static Stream<List<Medic>> getAllMedicStream(String pharmacy) async* {
+    if (pharmacy.isEmpty) {
+      yield [];
+      return;
+    }
     var collection = getMedicCollection(pharmacy);
+    var stream = collection.snapshots();
+    var medicStream = stream.map((snapshot) {
+      var document = snapshot.docs;
+      var medicList = document.map((doc) => doc.data()).toList();
+      return medicList;
+    });
+    yield* medicStream;
+  }
+
+  static Stream<List<Medic>> getAllMedicGroupStream() async* {
+    var collection = FirebaseFirestore.instance
+        .collectionGroup("medicines")
+        .withConverter(
+          fromFirestore: (snapshot, options) {
+            Map<String, dynamic>? data = snapshot.data();
+            return Medic.fromFireStore(data);
+          },
+          toFirestore: (medic, options) {
+            return medic.toFireStore();
+          },
+        );
     var stream = collection.snapshots();
     var medicStream = stream.map((snapshot) {
       var document = snapshot.docs;
