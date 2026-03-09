@@ -1,152 +1,289 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:pharmago/Models/Medicines.dart';
-import 'package:pharmago/Models/Order.dart' as myOrder;
-import 'package:pharmago/Providers/UserProvider.dart';
-import 'package:pharmago/UI/Home/Tabs/Home/widget/Pharmaitems.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../Core/resources/StringsManger.dart';
-import '../../../../Providers/MapsProvider.dart';
+import '../../../../Models/Medicines.dart';
 import '../../../../core/FirestoreHandler.dart';
-import '../../../../core/resources/ColorManger.dart';
+import '../../../../Providers/CartProvider.dart';
+import '../../../Cart/CartScreen.dart';
 
-class HomeTab extends StatefulWidget {
-  const HomeTab({super.key});
-
-  @override
-  State<HomeTab> createState() => _HomeTabState();
-}
-
-class _HomeTabState extends State<HomeTab> {
-
-  String searchQuery = '';
-  bool isSearching = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    Future.microtask(() {
-      final user = context.read<UserProvider>().myUser;
-
-      if (user?.pharmacy == false) {
-        context.read<MapsProvider>().loadPharmaciesOnMap();
-      }
-
-      context.read<MapsProvider>().getLocation();
-    });
-  }
-
+class HomeTap extends StatelessWidget {
+  static const String routeName = "home";
+  const HomeTap({super.key});
 
   @override
   Widget build(BuildContext context) {
-    MapsProvider provider = Provider.of<MapsProvider>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        title: const Text("Pharmacy",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
         centerTitle: true,
-        title:
-        isSearching
-            ? TextField(
-          onChanged: (value) {
-            setState(() {
-              searchQuery =
-                  value
-                      .toLowerCase();
-            });
-          },
-          decoration: InputDecoration(
-            hintText:
-            StringsManger.searchPharma.tr(),
-            border: InputBorder.none,
-            hintStyle: TextStyle(color: ColorManger.green),
-          ),
-          style: TextStyle(color: ColorManger.black),
-          autofocus: true, // Auto-focus for better UX
-        )
-            : Text(
-          StringsManger.pharmacies.tr(),
-          style: Theme
-              .of(context)
-              .textTheme
-              .titleMedium,
-        ),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                isSearching = !isSearching;
-                if (!isSearching) {
-                  searchQuery = '';
-                }
-              });
-            },
-            icon:
-            isSearching
-                ? Icon(Icons.close, color: ColorManger.green)
-                : Icon(Icons.search, color: ColorManger.green),
+          Consumer<CartProvider>(
+            builder: (context, cart, child) => Stack(
+              alignment: Alignment.center,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, CartScreen.routeName);
+                    },
+                    icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black)
+                ),
+                if (cart.itemCount > 0)
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        '${cart.itemCount}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ],
       ),
-      body: StreamBuilder(
-        stream: FirestoreHandler.getAllPharmaStream(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Column(
-              children: [
-                Text(snapshot.error.toString()),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {});
-                  },
-                  child: Text(StringsManger.wrong),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// 1. Search Bar
+            TextField(
+              decoration: InputDecoration(
+                hintText: "searchMedic".tr(),
+                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide.none,
                 ),
-              ],
-            );
-          }
-          var pharma = snapshot.data ?? [];
-          if (pharma.isEmpty) {
-            return Center(
-              child: Text(
-                StringsManger.noPharma,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .bodySmall,
               ),
-            );
-          }
-          final filteredPharmacies =
-          pharma.where((m) {
-            final name = m.title?.toLowerCase() ?? '';
-            return name.contains(searchQuery);
-          }).toList();
-
-          if (filteredPharmacies.isEmpty && searchQuery.isNotEmpty) {
-            return Center(
-              child: Text(
-                StringsManger.noPharma.tr(),
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .bodySmall,
-              ),
-            );
-          }
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: ListView.separated(
-              itemBuilder:
-                  (context, index) => PharmaItems(filteredPharmacies[index]),
-              separatorBuilder: (context, index) => SizedBox(height: 16),
-              itemCount: filteredPharmacies.length,
             ),
-          );
-        },
+            const SizedBox(height: 25),
+
+            /// 2. Prescription Banner
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE0F2F1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "orderQuickly".tr(),
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              height: 1.2
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.teal,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                          ),
+                          child: Text("uploadPres".tr()),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Expanded(
+                    flex: 1,
+                    child: Icon(Icons.medication_liquid_sharp,
+                        size: 70, color: Colors.teal),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 30),
+
+            /// 3. Popular Product Section
+            _buildSectionHeader("popularProduct".tr()),
+            const SizedBox(height: 15),
+            StreamBuilder<List<Medic>>(
+              stream: FirestoreHandler.getAllMedicGroupStream(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                var medicines = snapshot.data ?? [];
+                if (medicines.isEmpty) {
+                  return Center(child: Text("noMedic".tr()));
+                }
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: 230,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: medicines.length > 5 ? 5 : medicines.length,
+                        itemBuilder: (context, index) => _buildProductCard(context, medicines[index]),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    /// 4. Product On Sale Section
+                    _buildSectionHeader("productOnSale".tr()),
+                    const SizedBox(height: 15),
+                    ...medicines.take(3).map((medic) => _buildProductCardVertical(context, medic)).toList(),
+                    const SizedBox(height: 20),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        TextButton(
+          onPressed: () {},
+          child: Text("seeAll".tr(),
+              style: const TextStyle(color: Colors.teal, fontWeight: FontWeight.bold)),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProductCard(BuildContext context, Medic medic) {
+    return Container(
+      width: 150,
+      margin: const EdgeInsets.only(right: 15, bottom: 5),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.grey.shade100),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Center(
+              child: Icon(Icons.medication, size: 60, color: Colors.teal.shade200),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(medic.name ?? "",
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("\$${medic.price ?? 0}",
+                  style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.teal)),
+              InkWell(
+                onTap: () {
+                  Provider.of<CartProvider>(context, listen: false).addItem(medic);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${medic.name} added to cart!'),
+                      duration: const Duration(seconds: 1),
+                      backgroundColor: Colors.teal,
+                    ),
+                  );
+                },
+                child: const Icon(Icons.add_box, color: Colors.teal, size: 28),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProductCardVertical(BuildContext context, Medic medic) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.teal.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(Icons.medical_services, color: Colors.teal),
+          ),
+          const SizedBox(width: 15),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(medic.name ?? "",
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(height: 4),
+              Text("\$${medic.price ?? 0}",
+                  style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          const Spacer(),
+          InkWell(
+            onTap: () {
+              Provider.of<CartProvider>(context, listen: false).addItem(medic);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${medic.name} added to cart!'),
+                  duration: const Duration(seconds: 1),
+                  backgroundColor: Colors.teal,
+                ),
+              );
+            },
+            child: const Icon(Icons.add_circle, color: Colors.teal, size: 32),
+          ),
+        ],
       ),
     );
   }
