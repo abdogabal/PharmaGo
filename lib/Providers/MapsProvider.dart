@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../core/SupabaseHandler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -21,24 +21,22 @@ class MapsProvider extends ChangeNotifier {
   //   setLocationListener();
   //}
   Future<void> loadPharmaciesOnMap() async {
-    final snapshot =
-        await FirebaseFirestore.instance.collection('Pharmacies').get();
+    final data = await SupabaseHandler.supabase.from('pharmacies').select();
 
     markers.removeWhere((m) => m.markerId.value != 'user');
 
-    for (var doc in snapshot.docs) {
-      final data = doc.data();
+    for (var row in data) {
 
-      final lat = (data['latitude'] as num?)?.toDouble();
-      final lng = (data['longitude'] as num?)?.toDouble();
+      final lat = (row['latitude'] as num?)?.toDouble();
+      final lng = (row['longitude'] as num?)?.toDouble();
 
       if (lat == null || lng == null) continue;
 
-      final pharma = Pharma.fromFireStore(data);
+      final pharma = Pharma.fromJson(row);
 
       markers.add(
         Marker(
-          markerId: MarkerId(doc.id),
+          markerId: MarkerId(pharma.id ?? ''),
           position: LatLng(lat, lng),
           infoWindow: InfoWindow(title: pharma.title),
           onTap: () {

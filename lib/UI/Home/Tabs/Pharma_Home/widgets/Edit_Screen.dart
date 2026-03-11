@@ -7,7 +7,7 @@ import '../../../../../Core/resources/StringsManger.dart';
 import '../../../../../Models/Medicines.dart';
 import '../../../../../Providers/UserProvider.dart';
 import '../../../../../core/DialogUtils.dart';
-import '../../../../../core/FirestoreHandler.dart';
+import '../../../../../core/SupabaseHandler.dart';
 import '../../../../../core/Reusable_component/CustomButton.dart';
 import '../../../../../core/Reusable_component/CustomTextField.dart';
 
@@ -116,7 +116,7 @@ class _EditScreenState extends State<EditScreen> {
                       onClick: () async {
                         if (formKey.currentState?.validate() ?? false) {
                           try {
-                            await FirestoreHandler.editMedic(
+                            await SupabaseHandler.editMedic(
                               Medic(
                                 id: medic.id,
                                 name: nameController.text,

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../Core/resources/StringsManger.dart';
 import '../../../../../Providers/UserProvider.dart';
-import '../../../../../core/FirestoreHandler.dart';
+import '../../../../../core/SupabaseHandler.dart';
 import '../widgets/Order_Item.dart';
 
 class PharmaOrders extends StatefulWidget {
@@ -22,12 +22,12 @@ class _PharmaOrdersState extends State<PharmaOrders> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          StringsManger.pharmacies.tr(),
+          "orders".tr(),
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
       body: StreamBuilder(
-        stream: FirestoreHandler.getPharmaOrderStream(userProvider.myUser?.pharma??''),
+        stream: SupabaseHandler.getPharmaOrderStream(userProvider.myUser?.pharma ?? ''),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

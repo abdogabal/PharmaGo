@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../Models/User.dart' as MyUser;
 import '../../../Providers/UserProvider.dart';
 import '../../../core/DialogUtils.dart';
-import '../../../core/FirestoreHandler.dart';
+import '../../../core/SupabaseHandler.dart';
 import '../../../core/Reusable_component/CustomButton.dart';
 import '../../../core/resources/StringsManger.dart';
 import '../../../core/resources/constans.dart';
@@ -153,21 +153,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
     UserProvider provider = Provider.of<UserProvider>(context, listen: false);
     try {
       DialogUtils.showLoading(context);
-      UserCredential credential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-            email: emailController.text,
-            password: passController.text,
-          );
-      await FirestoreHandler.addUser(
+      AuthResponse response = await Supabase.instance.client.auth.signUp(
+        email: emailController.text,
+        password: passController.text,
+      );
+      await SupabaseHandler.addUser(
         MyUser.User(
-          id: credential.user?.uid,
+          id: response.user?.id,
           name: nameController.text,
           email: emailController.text,
           number: numbController.text
         ),
       );
-      MyUser.User? myUser = await FirestoreHandler.getUser(
-        credential.user?.uid ?? "",
+      MyUser.User? myUser = await SupabaseHandler.getUser(
+        response.user?.id ?? "",
       );
       provider.saveUser(myUser);
       Navigator.pop(context);
@@ -176,37 +175,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
         HomeScreen.routeName,
             (routeName) => false,
       );
-    } on FirebaseAuthException catch (e) {
+    } on AuthException catch (e) {
       Navigator.pop(context);
-      if (e.code == 'weak-password') {
-        DialogUtils.showMassageDialog(
-          context: context,
-          massage: StringsManger.weakPass.tr(),
-          posTitle: StringsManger.ok.tr(),
-          posClick: () {
-            Navigator.pop(context);
-          },
-        );
-      } else if (e.code == 'email-already-in-use') {
-        DialogUtils.showMassageDialog(
-          context: context,
-          massage: StringsManger.accExist.tr(),
-          posTitle: StringsManger.ok.tr(),
-          posClick: () {
-            Navigator.pop(context);
-          },
-        );
-      } else {
-        DialogUtils.showMassageDialog(
-          context: context,
-          massage: e.code,
-          posTitle: StringsManger.ok.tr(),
-          posClick: () {
-            Navigator.pop(context);
-          },
-        );
-      }
-
+      DialogUtils.showMassageDialog(
+        context: context,
+        massage: e.message,
+        posTitle: StringsManger.ok.tr(),
+        posClick: () {
+          Navigator.pop(context);
+        },
+      );
+    } catch (e) {
+      Navigator.pop(context);
+      DialogUtils.showMassageDialog(
+        context: context,
+        massage: e.toString(),
+        posTitle: StringsManger.ok.tr(),
+        posClick: () {
+          Navigator.pop(context);
+        },
+      );
     }
   }
 }

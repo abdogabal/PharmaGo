@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class Order {
   String? id;
@@ -8,11 +8,12 @@ class Order {
   String? pharmaID;
   String? pharmaNum;
   String? userNum;
-  Timestamp? time;
+  DateTime? time;
   double? latitude;
   double? longitude;
   double? fullPrice;
   bool? finish;
+  String? prescriptionImage;
 
   Order({
     this.id,
@@ -27,38 +28,45 @@ class Order {
     this.time,
     this.longitude,
     this.latitude,
+    this.prescriptionImage,
   });
 
-  Order.fromFireStore(Map<String, dynamic>? data) {
+  Order.fromJson(Map<String, dynamic>? data) {
     id = data?['ID'];
-    userID = data?['UserID'];
-    pharmaID = data?['PharmaID'];
-    pharmaName = data?['PharmaName'];
-    pharmaNum = data?['PharmaNum'];
-    userName = data?['UserName'];
-    userNum = data?['UserNum'];
-    fullPrice = (data?['FullPrice'] as num?)?.toDouble();
-    finish = data?['finish']as bool?;
-    time = data?['Time'];
+    userID = data?['user_id'];
+    pharmaID = data?['pharma_id'];
+    pharmaName = data?['pharma_name'];
+    pharmaNum = data?['pharma_num'];
+    userName = data?['user_name'];
+    userNum = data?['user_num'];
+    fullPrice = (data?['full_price'] as num?)?.toDouble();
+    finish = data?['finish'] as bool?;
+    
+    // Parse Supabase DateTime string
+    if (data?['created_at'] != null) {
+      time = DateTime.tryParse(data?['created_at'].toString() ?? '');
+    }
+    
     latitude = (data?['latitude'] as num?)?.toDouble();
     longitude = (data?['longitude'] as num?)?.toDouble();
-
+    prescriptionImage = data?['prescriptionImage'];
   }
 
-  Map<String, dynamic> toFireStore() {
+  Map<String, dynamic> toJson() {
     return {
-      "ID": id,
+      "id": id,
       "longitude": longitude,
       "latitude": latitude,
-      "UserID": userID,
-      "UserName": userName,
-      "UserNum": userNum,
-      "PharmaID": pharmaID,
-      "PharmaName": pharmaName,
-      "PharmaNum": pharmaNum,
-      "FullPrice": fullPrice,
+      "user_id": userID,
+      "user_name": userName,
+      "user_num": userNum,
+      "pharma_id": pharmaID,
+      "pharma_name": pharmaName,
+      "pharma_num": pharmaNum,
+      "full_price": fullPrice,
       "finish": finish,
-      "Time": time,
+      "created_at": time?.toIso8601String(),
+      "prescriptionImage": prescriptionImage,
     };
   }
 }

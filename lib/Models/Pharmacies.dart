@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class Pharma {
   String? id;
@@ -6,30 +6,34 @@ class Pharma {
   String? phone;
   double? latitude;
   double? longitude;
+  String? imageUrl;
 
   Pharma({
     this.id,
     this.title,
     this.longitude,
     this.latitude,
-    this.phone
+    this.phone,
+    this.imageUrl,
   });
 
-  Pharma.fromFireStore(Map<String, dynamic>? data) {
+  Pharma.fromJson(Map<String, dynamic>? data) {
     id = data?['id'];
     title = data?['title'];
     phone = data?['phone'];
     latitude = (data?['latitude'] as num?)?.toDouble();
     longitude = (data?['longitude'] as num?)?.toDouble();
+    imageUrl = data?['image_url'];
   }
 
-  Map<String, dynamic> toFireStore() {
+  Map<String, dynamic> toJson() {
     return {
       "id": id,
       "title": title,
       "longitude": longitude,
       "latitude": latitude,
       "phone": phone,
+      "image_url": imageUrl,
     };
   }
 }

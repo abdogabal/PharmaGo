@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 import '../../../Models/User.dart' as MyUser;
 import '../../../Providers/UserProvider.dart';
 import '../../../core/DialogUtils.dart';
-import '../../../core/FirestoreHandler.dart';
+import '../../../core/SupabaseHandler.dart';
 import '../../../core/Reusable_component/CustomButton.dart';
 import '../../../core/resources/constans.dart';
 import '../../ForgetPassword/Screens/Forget_Password.dart';
@@ -233,19 +233,17 @@ class _LoginScreenState extends State<LoginScreen> {
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+      // Sign in with Supabase using Google ID Token
+      final AuthResponse response = await Supabase.instance.client.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: googleAuth.idToken ?? '',
+        accessToken: googleAuth.accessToken ?? '',
       );
-      // Sign in with Firebase
-      final UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithCredential(credential);
 
-      await FirestoreHandler.addUser(
+      await SupabaseHandler.addUser(
         MyUser.User(
-          id: userCredential.user?.uid ?? '',
-          // Use Firebase UID instead of providerId
+          id: response.user?.id ?? '',
+          // Use Supabase UID instead of providerId
           name: googleUser.displayName ?? '',
           email: googleUser.email ?? '',
         ),
@@ -274,13 +272,12 @@ class _LoginScreenState extends State<LoginScreen> {
     UserProvider provider = Provider.of<UserProvider>(context, listen: false);
     try {
       DialogUtils.showLoading(context);
-      UserCredential credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-            email: emailController.text,
-            password: passController.text,
-          );
-      MyUser.User? myUser = await FirestoreHandler.getUser(
-        credential.user?.uid ?? "",
+      AuthResponse response = await Supabase.instance.client.auth.signInWithPassword(
+        email: emailController.text,
+        password: passController.text,
+      );
+      MyUser.User? myUser = await SupabaseHandler.getUser(
+        response.user?.id ?? "",
       );
       provider.saveUser(myUser);
       Navigator.pop(context);
@@ -289,36 +286,26 @@ class _LoginScreenState extends State<LoginScreen> {
         HomeScreen.routeName,
         (routeName) => false,
       );
-    } on FirebaseAuthException catch (e) {
+    } on AuthException catch (e) {
       Navigator.pop(context);
-      if (e.code == 'user-not-found') {
-        DialogUtils.showMassageDialog(
-          context: context,
-          massage: StringsManger.wrong.tr(),
-          posTitle: StringsManger.ok.tr(),
-          posClick: () {
-            Navigator.pop(context);
-          },
-        );
-      } else if (e.code == 'wrong-password') {
-        DialogUtils.showMassageDialog(
-          context: context,
-          massage: StringsManger.passWrong.tr(),
-          posTitle: StringsManger.ok.tr(),
-          posClick: () {
-            Navigator.pop(context);
-          },
-        );
-      } else {
-        DialogUtils.showMassageDialog(
-          context: context,
-          massage: e.code,
-          posTitle: StringsManger.ok.tr(),
-          posClick: () {
-            Navigator.pop(context);
-          },
-        );
-      }
+      DialogUtils.showMassageDialog(
+        context: context,
+        massage: e.message,
+        posTitle: StringsManger.ok.tr(),
+        posClick: () {
+          Navigator.pop(context);
+        },
+      );
+    } catch (e) {
+      Navigator.pop(context);
+      DialogUtils.showMassageDialog(
+        context: context,
+        massage: e.toString(),
+        posTitle: StringsManger.ok.tr(),
+        posClick: () {
+          Navigator.pop(context);
+        },
+      );
     }
   }
 }

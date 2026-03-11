@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 import '../../../Models/User.dart' as MyUser;
 import '../../../Providers/MapsProvider.dart';
 import '../../../Providers/UserProvider.dart';
-import '../../../core/FirestoreHandler.dart';
+import '../../../core/SupabaseHandler.dart';
 import '../../../core/resources/AssetsManger.dart';
 import '../../../core/resources/StringsManger.dart';
 import '../Tabs/Calendar/remainder_Screen.dart';
@@ -56,8 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
       listen: false,
     );
     if (provider.myUser == null) {
-      MyUser.User? user = await FirestoreHandler.getUser(
-        FirebaseAuth.instance.currentUser?.uid ?? "",
+      MyUser.User? user = await SupabaseHandler.getUser(
+        Supabase.instance.client.auth.currentSession?.user.id ?? "",
       );
 
       provider.saveUser(user);

@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -26,13 +26,15 @@ import 'UI/Checkout/PaymentScreen.dart';
 import 'core/PrefsManager.dart';
 import 'core/Reusable_component/notification_handler.dart';
 import 'core/resources/AppStyle.dart';
-import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await PrefsManager.init();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Supabase.initialize(
+    url: 'https://owwwnnrphgiiyhitdwxe.supabase.co',
+    anonKey: 'sb_publishable_AOGuivMoHC9bFX84Ka6u-A_Wvt36L3s',
+  );
   await NotificationHandler.init();
   runApp(
     EasyLocalization(

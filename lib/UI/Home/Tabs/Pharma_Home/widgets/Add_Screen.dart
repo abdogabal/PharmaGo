@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pharmago/Core/resources/StringsManger.dart';
-import 'package:pharmago/core/FirestoreHandler.dart';
+import 'package:pharmago/core/SupabaseHandler.dart';
 import 'package:pharmago/core/Reusable_component/CustomTextField.dart';
 import 'package:provider/provider.dart';
 
@@ -110,7 +110,7 @@ class _AddScreenState extends State<AddScreen> {
                       onClick: () async {
                         if (formKey.currentState?.validate() ?? false) {
                           try {
-                            await FirestoreHandler.addMedic(
+                            await SupabaseHandler.addMedic(
                               Medic(
                                 name: nameController.text,
                                 price: double.tryParse(
