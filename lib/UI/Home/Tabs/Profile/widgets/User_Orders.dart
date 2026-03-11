@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../Core/resources/StringsManger.dart';
 import '../../../../../Providers/UserProvider.dart';
-import '../../../../../core/FirestoreHandler.dart';
+import '../../../../../core/SupabaseHandler.dart';
 import 'User_Order_Item.dart';
 
 class UserOrders extends StatefulWidget {
@@ -28,7 +28,7 @@ class _UserOrdersState extends State<UserOrders> {
         ),
       ),
       body: StreamBuilder(
-        stream: FirestoreHandler.getUserOrdersStream(userProvider.myUser?.id??''),
+        stream: SupabaseHandler.getUserOrdersStream(userProvider.myUser?.id??''),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

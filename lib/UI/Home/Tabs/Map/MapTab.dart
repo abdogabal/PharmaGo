@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../Core/resources/StringsManger.dart';
 import '../../../../Providers/MapsProvider.dart';
-import '../../../../core/FirestoreHandler.dart';
+import '../../../../core/SupabaseHandler.dart';
 import '../../../../core/resources/ColorManger.dart';
 import '../Home/widget/Pharmaitems.dart';
 

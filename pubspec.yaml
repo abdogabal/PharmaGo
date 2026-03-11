@@ -40,9 +40,7 @@ dependencies:
   provider: ^6.1.5
   shared_preferences: ^2.5.3
   dots_indicator: ^4.0.1
-  firebase_core: ^4.4.0
-  firebase_auth: ^6.1.4
-  cloud_firestore: ^6.1.2
+  supabase_flutter: ^2.5.0
   location: ^8.0.0
   google_maps_flutter: ^2.12.2
   geocoding: ^4.0.0
@@ -53,6 +51,8 @@ dependencies:
   smooth_page_indicator: ^2.0.1
   flutter_local_notifications: ^17.0.0
   timezone: ^0.9.2
+  http: ^1.2.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

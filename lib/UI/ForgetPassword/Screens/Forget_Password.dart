@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pharmago/core/Reusable_component/CustomTextField.dart';
@@ -92,32 +92,31 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   resetPass() async {
     try {
       DialogUtils.showLoading(context);
-      await FirebaseAuth.instance.sendPasswordResetEmail(
-        email: emailController.text,
+      await Supabase.instance.client.auth.resetPasswordForEmail(
+        emailController.text,
       );
       Navigator.pop(context);
       DialogUtils.showSnackBar( StringsManger.resetLinkSent.tr());
-    } on FirebaseAuthException catch (e) {
+    } on AuthException catch (e) {
       Navigator.pop(context);
-      if (e.code == "user-not-found") {
-        DialogUtils.showMassageDialog(
-          context: context,
-          massage: StringsManger.noUserAcc.tr(),
-          posTitle: StringsManger.ok.tr(),
-          posClick: () {
-            Navigator.pop(context);
-          },
-        );
-      } else {
-        DialogUtils.showMassageDialog(
-          context: context,
-          massage: e.code,
-          posTitle: StringsManger.ok.tr(),
-          posClick: () {
-            Navigator.pop(context);
-          },
-        );
-      }
+      DialogUtils.showMassageDialog(
+        context: context,
+        massage: e.message,
+        posTitle: StringsManger.ok.tr(),
+        posClick: () {
+          Navigator.pop(context);
+        },
+      );
+    } catch (e) {
+      Navigator.pop(context);
+      DialogUtils.showMassageDialog(
+        context: context,
+        massage: e.toString(),
+        posTitle: StringsManger.ok.tr(),
+        posClick: () {
+          Navigator.pop(context);
+        },
+      );
     }
   }
 }

@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 class User {
   String? id;
@@ -8,27 +8,27 @@ class User {
   bool? pharmacy;
   String? pharma;
 
-  User({this.name, this.email, this.id, this.number,this.pharmacy,this.pharma});
+  User({this.name, this.email, this.id, this.number,this.pharmacy = false,this.pharma});
 
-  User.fromFireStore(Map<String, dynamic>? data) {
+  User.fromJson(Map<String, dynamic>? data) {
     id = data?["id"];
     name = data?["name"];
     email = data?["email"];
     number = data?["number"];
-    pharmacy = data?['Pharmacy'] as bool?;
-    pharma = data?["pharma"];
+    pharmacy = data?['pharmacy'] as bool?;
+    pharma = data?["pharma_id"];
 
   }
 
-  Map<String, dynamic> toFireStore() {
+  Map<String, dynamic> toJson() {
 
     return {
       "id":id,
       "name":name,
       "email":email,
       "number":number,
-      "Pharmacy":pharmacy,
-      "pharma":pharma
+      "pharmacy": pharmacy,
+      "pharma_id": pharma
     };
   }
 }

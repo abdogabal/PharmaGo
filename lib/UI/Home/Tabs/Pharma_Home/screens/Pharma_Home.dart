@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../Core/resources/StringsManger.dart';
 import '../../../../../Providers/UserProvider.dart';
-import '../../../../../core/FirestoreHandler.dart';
+import '../../../../../core/SupabaseHandler.dart';
 import '../../../../PharmacyScreen/widgets/MedicItems.dart';
 import '../../Home/widget/Pharmaitems.dart';
 import '../widgets/Add_Screen.dart';
@@ -68,7 +68,7 @@ class _PharmaHomeState extends State<PharmaHome> {
         ],
       ),
       body: StreamBuilder(
-        stream: FirestoreHandler.getAllMedicStream(
+        stream: SupabaseHandler.getAllMedicStream(
           userProvider.myUser?.pharma ?? '',
         ),
         builder: (context, snapshot) {

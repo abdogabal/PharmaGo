@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import '../../../../Models/Medicines.dart';
-import '../../../../core/FirestoreHandler.dart';
+import '../../../../core/SupabaseHandler.dart';
 import '../../../../Providers/CartProvider.dart';
 import '../../../Cart/CartScreen.dart';
 
@@ -102,7 +106,7 @@ class HomeTap extends StatelessWidget {
                         ),
                         const SizedBox(height: 15),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () => _pickAndUploadPrescription(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.teal,
                             foregroundColor: Colors.white,
@@ -131,7 +135,7 @@ class HomeTap extends StatelessWidget {
             _buildSectionHeader("popularProduct".tr()),
             const SizedBox(height: 15),
             StreamBuilder<List<Medic>>(
-              stream: FirestoreHandler.getAllMedicGroupStream(),
+              stream: SupabaseHandler.getAllMedicGroupStream(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -286,5 +290,75 @@ class HomeTap extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _pickAndUploadPrescription(BuildContext context) async {
+    final ImagePicker picker = ImagePicker();
+    // Allow user to pick from gallery or camera
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    
+    if (image == null) return; // User canceled
+    
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext c) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+
+    try {
+      File imageFile = File(image.path);
+      // Use the actual Wi-Fi IP address so the physical phone can reach the computer
+      var uri = Uri.parse('http://192.168.1.13:8000/predict');
+      var request = http.MultipartRequest('POST', uri);
+      
+      request.files.add(await http.MultipartFile.fromPath(
+        'file', 
+        imageFile.path,
+      ));
+
+      var response = await request.send();
+      
+      // Close the loading dialog
+      Navigator.pop(context);
+
+      if (response.statusCode == 200) {
+        var responseBody = await response.stream.bytesToString();
+        var jsonResponse = jsonDecode(responseBody);
+        String recognizedText = jsonResponse['text'];
+        
+        // Show result
+        showDialog(
+          context: context,
+          builder: (BuildContext c) {
+            return AlertDialog(
+              title: const Text("Prescription Read Successfully!"),
+              content: Text("The AI Model Read:\n\n$recognizedText"),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(c),
+                  child: const Text("Search Medicine"),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(c),
+                  child: const Text("Close"),
+                )
+              ],
+            );
+          }
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+           SnackBar(content: Text('API Error: ${response.statusCode}')),
+        );
+      }
+    } catch (e) {
+      Navigator.pop(context); // Close loading
+      ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(content: Text('Failed to connect to AI Server: $e')),
+      );
+    }
   }
 }

@@ -6,7 +6,7 @@ import '../../../Core/resources/StringsManger.dart';
 import '../../../Models/Pharmacies.dart';
 import '../../../Providers/DetailsProvider.dart';
 import '../../../Providers/UserProvider.dart';
-import '../../../core/FirestoreHandler.dart';
+import '../../../core/SupabaseHandler.dart';
 import '../../../core/resources/ColorManger.dart';
 import '../../Home/Tabs/Home/widget/Pharmaitems.dart';
 import '../widgets/MedicItems.dart';
@@ -70,7 +70,7 @@ late Pharma pharma;
         ],
       ),
       body: StreamBuilder(
-        stream: FirestoreHandler.getAllMedicStream(pharma.id??''),
+        stream: SupabaseHandler.getAllMedicStream(pharma.id??''),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

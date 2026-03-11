@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pharmago/Models/Order.dart';
-import 'package:pharmago/core/FirestoreHandler.dart';
+import 'package:pharmago/core/SupabaseHandler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../Providers/DetailsProvider.dart';
@@ -52,7 +52,7 @@ class _OrderItemState extends State<OrderItem> {
                   ),
                 ),
                 Checkbox(value: widget.order.finish, onChanged: (value) {
-                  FirestoreHandler.checkOrder(value??false, widget.order.id??'');
+                  SupabaseHandler.checkOrder(value??false, widget.order.id??'');
                 },)
               ],
             ),
