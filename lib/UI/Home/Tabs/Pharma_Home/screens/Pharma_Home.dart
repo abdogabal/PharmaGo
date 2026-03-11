@@ -99,7 +99,8 @@ class _PharmaHomeState extends State<PharmaHome> {
           }
           final filteredMedicines = medic.where((m) {
             final name = m.name?.toLowerCase() ?? '';
-            return name.contains(searchQuery);
+            final ingredient = m.activeIngredient?.toLowerCase() ?? '';
+            return name.contains(searchQuery) || ingredient.contains(searchQuery);
           }).toList();
 
           if (filteredMedicines.isEmpty && searchQuery.isNotEmpty) {
