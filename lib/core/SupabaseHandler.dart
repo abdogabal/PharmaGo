@@ -57,10 +57,7 @@ class SupabaseHandler {
 
   // --- Orders ---
   static Future<void> addOrder(pharmaOrder.Order order) async {
-    // Generate UUID if empty. Supabase usually generates it, so we can omit ID if not required
-    // or rely on a generated ID
     final insertData = order.toJson();
-    insertData.remove('ID'); // Let supabase generate ID
     final data = await supabase.from('orders').insert(insertData).select().single();
     order.id = data['id'];
   }
@@ -69,7 +66,7 @@ class SupabaseHandler {
     return supabase
         .from('orders')
         .stream(primaryKey: ['id'])
-        .eq('UserID', userID)
+        .eq('user_id', userID)
         .map((maps) => maps.map((map) => pharmaOrder.Order.fromJson(map)).toList());
   }
 
@@ -77,22 +74,31 @@ class SupabaseHandler {
     return supabase
         .from('orders')
         .stream(primaryKey: ['id'])
-        .eq('PharmaID', pharmaID)
+        .eq('pharma_id', pharmaID)
         .map((maps) => maps.map((map) => pharmaOrder.Order.fromJson(map)).toList());
   }
 
   // --- Order Medicines ---
   static Future<void> addMedicToOrder(Medic medic, String orderId) async {
-    await supabase.from('order_items').insert({
+    final itemData = {
       'order_id': orderId,
-      'medicine_id': medic.id,
       'name': medic.name,
       'price': medic.price,
       'quantity': medic.quantity,
-    });
+    };
+    
+    // Only add medicine_id if it's a valid non-empty string, to avoid Postgres UUID parse errors
+    if (medic.id != null && medic.id!.isNotEmpty) {
+      itemData['medicine_id'] = medic.id;
+    }
+
+    await supabase.from('order_items').insert(itemData);
   }
 
   static Future<List<Medic>> getMedicinesForOrder(String orderId) async {
+    if (orderId.isEmpty || orderId.length < 32 || orderId == 'null') {
+      return [];
+    }
     final data = await supabase.from('order_items').select().eq('order_id', orderId);
     return data.map((map) => Medic.fromJson(map)).toList();
   }

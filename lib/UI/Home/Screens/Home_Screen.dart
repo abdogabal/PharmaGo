@@ -111,17 +111,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             BottomNavigationBarItem(
-              label: StringsManger.calendar.tr(),
-              icon: SvgPicture.asset(
-                AssetsManger.calendar,
-                width: 24.w,
-                height: 24.h,
-              ),
-              activeIcon: SvgPicture.asset(
-                AssetsManger.calendarSelected,
-                width: 24.w,
-                height: 24.h,
-              ),
+              label: pharmacy ? "Orders" : StringsManger.calendar.tr(),
+              icon: pharmacy 
+                ? const Icon(Icons.receipt_long, size: 24, color: Colors.grey)
+                : SvgPicture.asset(
+                    AssetsManger.calendar,
+                    width: 24.w,
+                    height: 24.h,
+                  ),
+              activeIcon: pharmacy
+                ? const Icon(Icons.receipt_long, color: ColorManger.green, size: 24)
+                : SvgPicture.asset(
+                    AssetsManger.calendarSelected,
+                    width: 24.w,
+                    height: 24.h,
+                  ),
             ),
             BottomNavigationBarItem(
               label: StringsManger.profile.tr(),

@@ -22,6 +22,7 @@ class AddScreen extends StatefulWidget {
 
 class _AddScreenState extends State<AddScreen> {
   late TextEditingController nameController;
+  late TextEditingController activeIngredientController;
   late TextEditingController priceController;
   late TextEditingController quantityController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -31,6 +32,7 @@ class _AddScreenState extends State<AddScreen> {
     // TODO: implement initState
     super.initState();
     nameController = TextEditingController();
+    activeIngredientController = TextEditingController();
     priceController = TextEditingController();
     quantityController = TextEditingController();
   }
@@ -40,6 +42,7 @@ class _AddScreenState extends State<AddScreen> {
     // TODO: implement dispose
     super.dispose();
     nameController.dispose();
+    activeIngredientController.dispose();
     priceController.dispose();
     quantityController.dispose();
   }
@@ -84,6 +87,19 @@ class _AddScreenState extends State<AddScreen> {
                       }
                       return null;
                     },
+                    controller: activeIngredientController,
+                    hint: 'Active Ingredient',
+                    prefixIcon: '',
+                    keyboardType: TextInputType.text,
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomTextField(
+                    validate: (value) {
+                      if (value == null || value.isEmpty) {
+                        return StringsManger.wrong.tr();
+                      }
+                      return null;
+                    },
                     controller: priceController,
                     hint: StringsManger.price.tr(),
                     prefixIcon: '',
@@ -113,6 +129,7 @@ class _AddScreenState extends State<AddScreen> {
                             await SupabaseHandler.addMedic(
                               Medic(
                                 name: nameController.text,
+                                activeIngredient: activeIngredientController.text,
                                 price: double.tryParse(
                                   priceController.text ?? '',
                                 ),

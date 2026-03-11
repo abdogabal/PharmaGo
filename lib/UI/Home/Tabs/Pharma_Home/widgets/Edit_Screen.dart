@@ -23,6 +23,7 @@ class EditScreen extends StatefulWidget {
 class _EditScreenState extends State<EditScreen> {
   late Medic medic;
   late TextEditingController nameController;
+  late TextEditingController activeIngredientController;
   late TextEditingController priceController;
   late TextEditingController quantityController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -32,6 +33,7 @@ class _EditScreenState extends State<EditScreen> {
     // TODO: implement initState
     super.initState();
     nameController = TextEditingController();
+    activeIngredientController = TextEditingController();
     priceController = TextEditingController();
     quantityController = TextEditingController();
 
@@ -42,6 +44,7 @@ class _EditScreenState extends State<EditScreen> {
     // TODO: implement dispose
     super.dispose();
     nameController.dispose();
+    activeIngredientController.dispose();
     priceController.dispose();
     quantityController.dispose();
   }
@@ -51,6 +54,7 @@ class _EditScreenState extends State<EditScreen> {
     medic = ModalRoute.of(context)!.settings.arguments as Medic;
     UserProvider userProvider = Provider.of<UserProvider>(context);
     nameController.text = medic.name ?? '';
+    activeIngredientController.text = medic.activeIngredient ?? '';
     priceController.text = medic.price.toString();
     quantityController.text = medic.quantity.toString();
     return Scaffold(
@@ -79,6 +83,19 @@ class _EditScreenState extends State<EditScreen> {
                     },
                     controller: nameController,
                     hint: StringsManger.medName.tr(),
+                    prefixIcon: '',
+                    keyboardType: TextInputType.text,
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomTextField(
+                    validate: (value) {
+                      if (value == null || value.isEmpty) {
+                        return StringsManger.wrong.tr();
+                      }
+                      return null;
+                    },
+                    controller: activeIngredientController,
+                    hint: 'Active Ingredient',
                     prefixIcon: '',
                     keyboardType: TextInputType.text,
                   ),
@@ -120,6 +137,7 @@ class _EditScreenState extends State<EditScreen> {
                               Medic(
                                 id: medic.id,
                                 name: nameController.text,
+                                activeIngredient: activeIngredientController.text,
                                 price: double.tryParse(
                                   priceController.text ?? '',
                                 ),

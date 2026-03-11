@@ -23,7 +23,7 @@ class _UserOrdersState extends State<UserOrders> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          StringsManger.pharmacies.tr(),
+          "orders".tr(),
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
@@ -49,8 +49,8 @@ class _UserOrdersState extends State<UserOrders> {
           var order = snapshot.data ?? [];
           if (order.isEmpty) {
             return Center(
-              child: Text(
-                StringsManger.noPharma,
+                child: Text(
+                  "There are no orders".tr(),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             );

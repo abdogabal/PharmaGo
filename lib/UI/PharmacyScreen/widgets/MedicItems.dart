@@ -5,14 +5,15 @@ import 'package:provider/provider.dart';
 import '../../../Models/Medicines.dart';
 import '../../../Providers/DetailsProvider.dart';
 import '../../../core/resources/ColorManger.dart';
-
+import '../../../Providers/UserProvider.dart';
 import '../../../Providers/CartProvider.dart';
 
 class MedicItems extends StatefulWidget {
   final Medic medic;
   final bool isOwner;
+  final String? pharmaId;
   
-  const MedicItems(this.medic, {Key? key, this.isOwner = false}) : super(key: key);
+  const MedicItems(this.medic, {Key? key, this.isOwner = false, this.pharmaId}) : super(key: key);
 
   @override
   State<MedicItems> createState() => _MedicItemsState();
@@ -22,10 +23,15 @@ class _MedicItemsState extends State<MedicItems> {
 
   @override
   Widget build(BuildContext context) {
-    DetailsProvider detailsProvider= Provider.of<DetailsProvider>(context);
+    DetailsProvider detailsProvider = Provider.of<DetailsProvider>(context);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    
+    // Explicitly check if the logged in user is a pharmacy owner
+    bool isPharmaOwner = userProvider.myUser?.pharmacy == true;
+
     return InkWell(
       onTap: () {
-        if (widget.isOwner) {
+        if (isPharmaOwner || widget.isOwner) {
           Navigator.pushNamed(context, EditScreen.routeName, arguments: widget.medic);
         }
       },
@@ -66,6 +72,16 @@ class _MedicItemsState extends State<MedicItems> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  if (widget.medic.activeIngredient != null && widget.medic.activeIngredient!.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      widget.medic.activeIngredient!,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 5),
                   Text(
                     "\$${widget.medic.price ?? 0.0}",
@@ -78,19 +94,42 @@ class _MedicItemsState extends State<MedicItems> {
                 ],
               ),
             ),
-            if (widget.isOwner)
-              const Icon(Icons.edit, color: Colors.grey)
+            if (isPharmaOwner || widget.isOwner)
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(context, EditScreen.routeName, arguments: widget.medic);
+                },
+                icon: const Icon(Icons.edit, size: 16),
+                label: const Text('Edit'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal.shade50,
+                  foregroundColor: Colors.teal,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+              )
             else
               InkWell(
                 onTap: () {
-                  Provider.of<CartProvider>(context, listen: false).addItem(widget.medic);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${widget.medic.name} added to cart!'),
-                      duration: const Duration(seconds: 1),
-                      backgroundColor: Colors.teal,
-                    ),
-                  );
+                  bool added = Provider.of<CartProvider>(context, listen: false).addItem(widget.medic, pharmaId: widget.pharmaId);
+                  
+                  if (added) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('${widget.medic.name} added to cart!'),
+                        duration: const Duration(seconds: 1),
+                        backgroundColor: Colors.teal,
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Cannot add more. Max stock reached for ${widget.medic.name}'),
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
                 },
                 child: Container(
                   padding: const EdgeInsets.all(8),

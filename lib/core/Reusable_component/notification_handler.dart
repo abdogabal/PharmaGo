@@ -13,6 +13,13 @@ class NotificationHandler {
     await _notifications.initialize(
       const InitializationSettings(android: androidInit, iOS: iosInit),
     );
+
+    final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+        _notifications.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    await androidImplementation?.requestNotificationsPermission();
+    final bool? exactAlarmsGranted = await androidImplementation?.requestExactAlarmsPermission();
+    print("Exact alarms permission granted: $exactAlarmsGranted");
   }
 
   static Future<void> scheduleNotification({

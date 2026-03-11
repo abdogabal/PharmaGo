@@ -12,6 +12,7 @@ import '../../../../Models/Pharmacies.dart';
 import '../../../PharmacyScreen/Screens/Pharmacy_Screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../Models/User.dart' as myUser;
+import '../../../../Providers/CartProvider.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:flutter/services.dart';
 
@@ -129,25 +130,55 @@ class _HomeTapState extends State<HomeTap> {
 
                 return StreamBuilder<List<Pharma>>(
                   stream: SupabaseHandler.getAllPharmaciesStream(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                  builder: (context, pharmaSnapshot) {
+                    if (pharmaSnapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    var pharmacies = snapshot.data ?? [];
+                    var pharmacies = pharmaSnapshot.data ?? [];
                     
                     if (isOwner) {
                       pharmacies = pharmacies.where((p) => p.id == ownerPharmaId).toList();
                     }
-                    
-                    if (searchQuery.isNotEmpty) {
-                      pharmacies = pharmacies.where((p) => p.title?.toLowerCase().contains(searchQuery) ?? false).toList();
-                    }
-                    
-                    if (pharmacies.isEmpty) {
-                      return Center(child: Text("noPharma".tr()));
-                    }
-                    return Column(
-                      children: pharmacies.map((pharma) => _buildPharmacyCardVertical(context, pharma)).toList(),
+
+                    return StreamBuilder<List<Medic>>(
+                      stream: SupabaseHandler.getAllMedicinesStream(),
+                      builder: (context, medicSnapshot) {
+                        if (medicSnapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        var allMedicines = medicSnapshot.data ?? [];
+
+                        if (searchQuery.isNotEmpty) {
+                          var pharmaMatchIds = pharmacies
+                              .where((p) => p.title?.toLowerCase().contains(searchQuery) ?? false)
+                              .map((p) => p.id)
+                              .toSet();
+                          
+                          var medicMatchPharmaIds = allMedicines
+                              .where((m) {
+                                final nameMatch = m.name?.toLowerCase().contains(searchQuery) ?? false;
+                                final ingredientMatch = m.activeIngredient?.toLowerCase().contains(searchQuery) ?? false;
+                                return nameMatch || ingredientMatch;
+                              })
+                              .map((m) => m.pharmaId)
+                              .whereType<String>()
+                              .toSet();
+
+                          var allMatchingIds = pharmaMatchIds.union(medicMatchPharmaIds);
+
+                          pharmacies = pharmacies.where((p) => allMatchingIds.contains(p.id)).toList();
+                        }
+                        
+                        if (pharmacies.isEmpty) {
+                          return Center(child: Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: Text("noPharma".tr()),
+                          ));
+                        }
+                        return Column(
+                          children: pharmacies.map((pharma) => _buildPharmacyCardVertical(context, pharma)).toList(),
+                        );
+                      }
                     );
                   },
                 );
@@ -177,6 +208,12 @@ class _HomeTapState extends State<HomeTap> {
   Widget _buildPharmacyCardVertical(BuildContext context, Pharma pharma) {
     return InkWell(
       onTap: () {
+        final cart = Provider.of<CartProvider>(context, listen: false);
+        if (cart.currentPharmaId != null && cart.currentPharmaId != pharma.id && cart.items.isNotEmpty) {
+          cart.clearCart();
+        }
+        cart.currentPharmaId = pharma.id;
+
         Navigator.pushNamed(context, PharmacyScreen.routeName, arguments: pharma);
       },
       child: Container(
@@ -231,10 +268,42 @@ class _HomeTapState extends State<HomeTap> {
 
   Future<void> _pickAndUploadPrescription(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
-    // Allow user to pick from gallery or camera
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     
-    if (image == null) return; // User canceled
+    // Show top sheet to choose source
+    final ImageSource? source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo_library, color: Colors.teal),
+                title: const Text('Photo Library'),
+                onTap: () {
+                  Navigator.of(context).pop(ImageSource.gallery);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera, color: Colors.teal),
+                title: const Text('Camera'),
+                onTap: () {
+                  Navigator.of(context).pop(ImageSource.camera);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (source == null) return; // User canceled inside the modal
+
+    final XFile? image = await picker.pickImage(source: source);
+    
+    if (image == null) return; // User canceled image picker
     
     // Show loading dialog
     showDialog(

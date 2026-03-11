@@ -49,7 +49,7 @@ class _PharmaOrdersState extends State<PharmaOrders> {
           if (order.isEmpty) {
             return Center(
               child: Text(
-                StringsManger.noPharma,
+                "There are no orders".tr(),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             );

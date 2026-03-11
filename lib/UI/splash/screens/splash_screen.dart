@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(Duration(seconds: 2), () {
       Navigator.of(context).pushReplacementNamed(
-        check()
+          check()
       );
     });
   }
@@ -45,12 +45,12 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-                  AssetsManger.logo,
-                  colorFilter: ColorFilter.mode(
-                    ColorManger.white,
-                    BlendMode.srcIn,
-                  ),
-                )
+              AssetsManger.logo,
+              colorFilter: ColorFilter.mode(
+                ColorManger.white,
+                BlendMode.srcIn,
+              ),
+            )
                 .animate()
                 .slideX(duration: Duration(milliseconds: 800))
                 .then()

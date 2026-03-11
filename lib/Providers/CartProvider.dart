@@ -5,6 +5,8 @@ import '../Models/CartItem.dart';
 class CartProvider extends ChangeNotifier {
   final Map<String, CartItem> _items = {};
 
+  String? currentPharmaId;
+
   Map<String, CartItem> get items => _items;
 
   int get itemCount {
@@ -23,10 +25,20 @@ class CartProvider extends ChangeNotifier {
     return total;
   }
 
-  void addItem(Medic medic) {
-    if (medic.id == null) return;
+  bool addItem(Medic medic, {String? pharmaId}) {
+    if (medic.id == null) return false;
     
+    if (pharmaId != null) {
+      if (currentPharmaId != null && currentPharmaId != pharmaId) {
+        clearCart();
+      }
+      currentPharmaId = pharmaId;
+    }
+
     if (_items.containsKey(medic.id)) {
+      if (_items[medic.id!]!.quantity >= (medic.quantity ?? double.infinity)) {
+        return false;
+      }
       _items.update(
         medic.id!,
         (existingCartItem) => CartItem(
@@ -35,16 +47,23 @@ class CartProvider extends ChangeNotifier {
         ),
       );
     } else {
+      if ((medic.quantity ?? double.infinity) < 1) {
+        return false;
+      }
       _items.putIfAbsent(
         medic.id!,
         () => CartItem(medic: medic, quantity: 1),
       );
     }
     notifyListeners();
+    return true;
   }
 
   void removeItem(String medicId) {
     _items.remove(medicId);
+    if (_items.isEmpty) {
+      currentPharmaId = null;
+    }
     notifyListeners();
   }
 
@@ -61,12 +80,16 @@ class CartProvider extends ChangeNotifier {
       );
     } else {
       _items.remove(medicId);
+      if (_items.isEmpty) {
+        currentPharmaId = null;
+      }
     }
     notifyListeners();
   }
 
   void clearCart() {
     _items.clear();
+    currentPharmaId = null;
     notifyListeners();
   }
 }

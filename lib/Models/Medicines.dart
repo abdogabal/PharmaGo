@@ -4,8 +4,10 @@ class Medic {
   String? id;
   String? name;
 double? price;
-double? quantity;
-String? imageUrl;
+  double? quantity;
+  String? imageUrl;
+  String? pharmaId;
+  String? activeIngredient;
 
   Medic({
     this.id,
@@ -13,6 +15,8 @@ String? imageUrl;
     this.price,
     this.quantity,
     this.imageUrl,
+    this.pharmaId,
+    this.activeIngredient,
   });
 
   Medic.fromJson(Map<String, dynamic>? data) {
@@ -21,15 +25,22 @@ String? imageUrl;
     price = (data?['price'] as num?)?.toDouble();
     quantity = (data?['quantity'] as num?)?.toDouble();
     imageUrl = data?['image_url'];
+    pharmaId = data?['pharmacy_id'];
+    activeIngredient = data?['active_ingredient'];
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      "id": id,
+    final map = <String, dynamic>{
       "name": name,
       "quantity": quantity,
       "price": price,
-      "image_url": imageUrl,
+      "pharmacy_id": pharmaId,
+      "active_ingredient": activeIngredient,
     };
+    if (id != null) {
+      map["id"] = id;
+    }
+    // Omit image_url since the column doesn't exist in Supabase
+    return map;
   }
 }

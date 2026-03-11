@@ -1,4 +1,4 @@
-
+import 'package:uuid/uuid.dart';
 
 class Order {
   String? id;
@@ -32,7 +32,7 @@ class Order {
   });
 
   Order.fromJson(Map<String, dynamic>? data) {
-    id = data?['ID'];
+    id = data?['id'];
     userID = data?['user_id'];
     pharmaID = data?['pharma_id'];
     pharmaName = data?['pharma_name'];
@@ -53,6 +53,7 @@ class Order {
   }
 
   Map<String, dynamic> toJson() {
+    id ??= const Uuid().v4();
     return {
       "id": id,
       "longitude": longitude,
@@ -66,7 +67,6 @@ class Order {
       "full_price": fullPrice,
       "finish": finish,
       "created_at": time?.toIso8601String(),
-      "prescriptionImage": prescriptionImage,
     };
   }
 }

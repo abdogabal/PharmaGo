@@ -11,7 +11,7 @@ import '../Core/resources/StringsManger.dart';
 
 class MapPickerProvider extends ChangeNotifier {
   Location location = Location();
-  late GoogleMapController googleMapController;
+  GoogleMapController? googleMapController;
   CameraPosition cameraPosition = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
@@ -72,7 +72,7 @@ class MapPickerProvider extends ChangeNotifier {
         infoWindow: InfoWindow(title: StringsManger.userLocation.tr()),
       ),
     );
-    googleMapController.animateCamera(
+    googleMapController?.animateCamera(
       CameraUpdate.newCameraPosition(cameraPosition),
     );
     notifyListeners();

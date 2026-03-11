@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:pharmago/core/resources/ColorManger.dart';
+import 'package:provider/provider.dart';
+import '../../../../Providers/ReminderProvider.dart';
+import '../../../../Models/Reminder.dart';
 import '../../../../core/Reusable_component/notification_handler.dart';
 
 class ScheduledPage extends StatefulWidget {
@@ -12,7 +15,8 @@ class ScheduledPage extends StatefulWidget {
 }
 
 class _ScheduledPageState extends State<ScheduledPage> {
-  int selectedDayIndex = 2;
+  List<int> selectedDays = [];
+  int selectedFrequency = 1;
   TimeOfDay selectedTime = TimeOfDay.now();
   final TextEditingController _nameController = TextEditingController();
 
@@ -81,9 +85,15 @@ class _ScheduledPageState extends State<ScheduledPage> {
                   scrollDirection: Axis.horizontal,
                   itemCount: dayKeys.length,
                   itemBuilder: (context, index) {
-                    bool isSelected = selectedDayIndex == index;
+                    bool isSelected = selectedDays.contains(index);
                     return GestureDetector(
-                      onTap: () => setState(() => selectedDayIndex = index),
+                      onTap: () => setState(() {
+                        if (isSelected) {
+                          selectedDays.remove(index);
+                        } else {
+                          selectedDays.add(index);
+                        }
+                      }),
                       child: Container(
                         width: 70,
                         margin: const EdgeInsets.only(right: 10),
@@ -110,7 +120,34 @@ class _ScheduledPageState extends State<ScheduledPage> {
               ),
               const SizedBox(height: 30),
               Text(
-                "reminderTime".tr(),
+                "Frequency",
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<int>(
+                    value: selectedFrequency,
+                    isExpanded: true,
+                    items: const [
+                      DropdownMenuItem(value: 1, child: Text("Once a day")),
+                      DropdownMenuItem(value: 2, child: Text("Twice a day (Every 12 hours)")),
+                      DropdownMenuItem(value: 3, child: Text("Three times a day (Every 8 hours)")),
+                    ],
+                    onChanged: (val) {
+                      if (val != null) setState(() => selectedFrequency = val);
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Text(
+                "First Dose Time",
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
@@ -153,22 +190,65 @@ class _ScheduledPageState extends State<ScheduledPage> {
                   ),
                   onPressed: () async {
                     String medName = _nameController.text.trim();
-
                     if (medName.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("noName".tr()), backgroundColor: Colors.red),
                       );
                       return;
                     }
+                    if (selectedDays.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please select at least one day"), backgroundColor: Colors.red),
+                      );
+                      return;
+                    }
 
-                    final scheduledDate = DateTime.now();
+                    final now = DateTime.now();
+                    List<int> notificationIds = [];
+                    int baseId = now.millisecondsSinceEpoch ~/ 1000;
+                    
+                    for (int dayIndex in selectedDays) {
+                      int targetWeekday = dayIndex + 1;
+                      int currentWeekday = now.weekday;
+                      
+                      for (int freq = 0; freq < selectedFrequency; freq++) {
+                        int hourOffset = freq * (24 ~/ selectedFrequency);
+                        int targetHour = (selectedTime.hour + hourOffset) % 24;
+                        int dayOffset = (selectedTime.hour + hourOffset) ~/ 24;
 
-                    await NotificationHandler.scheduleNotification(
-                      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-                      title: "Medication Reminder: $medName",
-                      body: "It's time for your dose!",
-                      scheduledDate: scheduledDate,
+                        int daysToAdd = targetWeekday - currentWeekday + dayOffset;
+                        if (daysToAdd < 0 || (daysToAdd == 0 && (now.hour > targetHour || (now.hour == targetHour && now.minute >= selectedTime.minute)))) {
+                          daysToAdd += 7;
+                        }
+                        
+                        DateTime scheduledDate = DateTime(
+                          now.year, now.month, now.day + daysToAdd,
+                          targetHour, selectedTime.minute,
+                        );
+
+                        int nId = baseId++;
+                        notificationIds.add(nId);
+
+                        await NotificationHandler.scheduleNotification(
+                          id: nId,
+                          title: "Medication Reminder: $medName",
+                          body: "It's time for your dose!",
+                          scheduledDate: scheduledDate,
+                        );
+                      }
+                    }
+
+                    Reminder newReminder = Reminder(
+                      id: DateTime.now().toIso8601String(),
+                      medName: medName,
+                      selectedDays: selectedDays,
+                      hour: selectedTime.hour,
+                      minute: selectedTime.minute,
+                      frequency: selectedFrequency,
+                      notificationIds: notificationIds,
                     );
+
+                    Provider.of<ReminderProvider>(context, listen: false).addReminder(newReminder);
 
                     if (context.mounted) {
                       Navigator.pop(context);

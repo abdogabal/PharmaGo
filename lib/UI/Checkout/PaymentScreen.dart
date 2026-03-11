@@ -6,6 +6,7 @@ import '../../../Models/Order.dart' as pharmaOrder;
 import '../../../Models/Medicines.dart';
 import '../../../core/SupabaseHandler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../Providers/MapPickerProvider.dart';
 
 class PaymentScreen extends StatefulWidget {
   static const String routeName = "payment-screen";
@@ -23,6 +24,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   String cardHolderName = '';
   String cvvCode = '';
   bool isCvvFocused = false;
+  bool isPayOnDelivery = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,27 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildCreditCardPreview(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ChoiceChip(
+                            label: Text("Credit Card"),
+                            selected: !isPayOnDelivery,
+                            onSelected: (val) => setState(() => isPayOnDelivery = false),
+                            selectedColor: Colors.teal.shade200,
+                          ),
+                          const SizedBox(width: 20),
+                          ChoiceChip(
+                            label: Text("Pay on Delivery"),
+                            selected: isPayOnDelivery,
+                            onSelected: (val) => setState(() => isPayOnDelivery = true),
+                            selectedColor: Colors.teal.shade200,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      if (!isPayOnDelivery) ...[
+                        _buildCreditCardPreview(),
                       const SizedBox(height: 30),
                       Text(
                         "cardDetails".tr(),
@@ -101,6 +123,24 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           ),
                         ],
                       ),
+                      ],
+                      if (isPayOnDelivery) 
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 40.0),
+                            child: Column(
+                              children: [
+                                Icon(Icons.delivery_dining, size: 80, color: Colors.teal),
+                                SizedBox(height: 20),
+                                Text(
+                                  "You will pay when the order arrives at your location.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -147,7 +187,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       height: 55,
                       child: ElevatedButton(
                         onPressed: () {
-                          if (formKey.currentState!.validate()) {
+                          if (isPayOnDelivery || formKey.currentState!.validate()) {
                             _processPayment(context, cart);
                           }
                         },
@@ -334,12 +374,39 @@ class _PaymentScreenState extends State<PaymentScreen> {
       final userAuth = Supabase.instance.client.auth.currentUser;
       if (userAuth == null) throw Exception("User not logged in");
 
+      // Verify and fetch explicit location
+      final mapProvider = Provider.of<MapPickerProvider>(context, listen: false);
+      
+      // Attempt to enforce location fetch
+      await mapProvider.getLocation();
+
+       // Verify we actually have a valid location before proceeding
+      if (mapProvider.cameraPosition.target.latitude == 0 && mapProvider.cameraPosition.target.longitude == 0 || 
+          mapProvider.cameraPosition.target.latitude == 37.42796133580664) {
+        throw Exception("Please grant location permissions to place an order.");
+      }
+
       final userData = await SupabaseHandler.getUser(userAuth.id);
+      
+      String currentPharmaId = cart.currentPharmaId ?? "";
+      final pharmaData = await Supabase.instance.client
+          .from('pharmacies')
+          .select()
+          .eq('id', currentPharmaId)
+          .maybeSingle();
+
+      String pName = pharmaData?['title'] ?? "Unknown Pharmacy";
+      String pNum = pharmaData?['phone'] ?? "";
 
       final newOrder = pharmaOrder.Order(
         userID: userAuth.id,
         userName: userData?.name ?? "Unknown",
         userNum: userData?.number ?? "",
+        pharmaID: currentPharmaId,
+        pharmaName: pName,
+        pharmaNum: pNum,
+        latitude: mapProvider.cameraPosition.target.latitude,
+        longitude: mapProvider.cameraPosition.target.longitude,
         fullPrice: cart.totalAmount,
         finish: false,
         time: DateTime.now(),

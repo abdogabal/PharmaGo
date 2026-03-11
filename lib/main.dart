@@ -12,6 +12,7 @@ import 'Providers/CartProvider.dart';
 import 'UI/ForgetPassword/Screens/Forget_Password.dart';
 import 'UI/Home/Screens/Home_Screen.dart';
 import 'UI/Home/Tabs/Calendar/CalendarTab.dart';
+import 'Providers/ReminderProvider.dart';
 import 'UI/Home/Tabs/Pharma_Home/widgets/Add_Screen.dart';
 import 'UI/Home/Tabs/Pharma_Home/widgets/Edit_Screen.dart';
 import 'UI/Home/Tabs/Profile/widgets/User_Orders.dart';
@@ -51,6 +52,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => MapPickerProvider()),
           ChangeNotifierProvider(create: (context) => DetailsProvider()),
           ChangeNotifierProvider(create: (context) => CartProvider()),
+          ChangeNotifierProvider(create: (context) => ReminderProvider()),
         ],
         child: MyApp(),
       ),

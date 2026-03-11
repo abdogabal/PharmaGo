@@ -120,7 +120,16 @@ class CartScreen extends StatelessWidget {
                               IconButton(
                                 icon: const Icon(Icons.add_circle, color: Colors.teal),
                                 onPressed: () {
-                                  cart.addItem(cartItem.medic);
+                                  bool added = cart.addItem(cartItem.medic, pharmaId: cart.currentPharmaId);
+                                  if (!added) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Max stock reached for ${cartItem.medic.name}'),
+                                        duration: const Duration(seconds: 2),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
                                 },
                               ),
                             ],
