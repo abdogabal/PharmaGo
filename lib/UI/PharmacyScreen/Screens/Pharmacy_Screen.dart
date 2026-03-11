@@ -9,7 +9,12 @@ import '../../../Providers/UserProvider.dart';
 import '../../../core/SupabaseHandler.dart';
 import '../../../core/resources/ColorManger.dart';
 import '../../Home/Tabs/Home/widget/Pharmaitems.dart';
+import '../../../../Models/User.dart' as myUser;
+import '../../../Providers/CartProvider.dart';
+import '../../Cart/CartScreen.dart';
+import '../../Home/Tabs/Pharma_Home/widgets/Add_Screen.dart';
 import '../widgets/MedicItems.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PharmacyScreen extends StatefulWidget {
   const PharmacyScreen({super.key});
@@ -67,11 +72,63 @@ late Pharma pharma;
                 ? Icon(Icons.close, color: ColorManger.green)
                 : Icon(Icons.search, color: ColorManger.green),
           ),
+          Consumer<CartProvider>(
+            builder: (context, cart, child) => Stack(
+              alignment: Alignment.center,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, CartScreen.routeName);
+                    },
+                    icon: Icon(Icons.shopping_cart_outlined, color: ColorManger.green)
+                ),
+                if (cart.itemCount > 0)
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        '${cart.itemCount}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ],
       ),
-      body: StreamBuilder(
-        stream: SupabaseHandler.getAllMedicStream(pharma.id??''),
-        builder: (context, snapshot) {
+      body: FutureBuilder<myUser.User?>(
+        future: SupabaseHandler.getUser(Supabase.instance.client.auth.currentUser?.id ?? ''),
+        builder: (context, userSnapshot) {
+          if (userSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final isOwner = userSnapshot.data?.pharmacy == true &&
+              userSnapshot.data?.pharma == pharma.id;
+
+          return Scaffold(
+            floatingActionButton: isOwner 
+              ? FloatingActionButton(
+                  backgroundColor: ColorManger.green,
+                  onPressed: () {
+                    Navigator.pushNamed(context, AddScreen.routeName);
+                  },
+                  child: const Icon(Icons.add, color: Colors.white),
+                ) 
+              : null,
+            body: StreamBuilder(
+              stream: SupabaseHandler.getAllMedicStream(pharma.id ?? ''),
+              builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
@@ -111,15 +168,17 @@ late Pharma pharma;
             );
           }
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: ListView.separated(
-              itemBuilder: (context, index) => MedicItems(filteredMedicines[index]),
-              separatorBuilder: (context, index) => SizedBox(height: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+            child: ListView.builder(
+              itemBuilder: (context, index) => MedicItems(filteredMedicines[index], isOwner: isOwner),
               itemCount: filteredMedicines.length,
             ),
           );
         },
       ),
-    );;
+    );
+     }
+      ),
+    );
   }
 }

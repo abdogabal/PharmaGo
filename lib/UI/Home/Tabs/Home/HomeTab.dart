@@ -7,12 +7,24 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import '../../../../Models/Medicines.dart';
 import '../../../../core/SupabaseHandler.dart';
-import '../../../../Providers/CartProvider.dart';
-import '../../../Cart/CartScreen.dart';
+import '../../../../core/SupabaseHandler.dart';
+import '../../../../Models/Pharmacies.dart';
+import '../../../PharmacyScreen/Screens/Pharmacy_Screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../../Models/User.dart' as myUser;
+import 'package:string_similarity/string_similarity.dart';
+import 'package:flutter/services.dart';
 
-class HomeTap extends StatelessWidget {
+class HomeTap extends StatefulWidget {
   static const String routeName = "home";
   const HomeTap({super.key});
+
+  @override
+  State<HomeTap> createState() => _HomeTapState();
+}
+
+class _HomeTapState extends State<HomeTap> {
+  String searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
@@ -25,41 +37,7 @@ class HomeTap extends StatelessWidget {
         title: const Text("Pharmacy",
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
         centerTitle: true,
-        actions: [
-          Consumer<CartProvider>(
-            builder: (context, cart, child) => Stack(
-              alignment: Alignment.center,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, CartScreen.routeName);
-                    },
-                    icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black)
-                ),
-                if (cart.itemCount > 0)
-                  Positioned(
-                    right: 8,
-                    top: 8,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '${cart.itemCount}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
+        actions: [],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
@@ -68,8 +46,13 @@ class HomeTap extends StatelessWidget {
           children: [
             /// 1. Search Bar
             TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value.toLowerCase();
+                });
+              },
               decoration: InputDecoration(
-                hintText: "searchMedic".tr(),
+                hintText: "searchPharma".tr(),
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
                 filled: true,
                 fillColor: Colors.grey.shade100,
@@ -131,39 +114,44 @@ class HomeTap extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            /// 3. Popular Product Section
-            _buildSectionHeader("popularProduct".tr()),
+            /// 3. Pharmacy Section
+            _buildSectionHeader("pharmacies".tr()),
             const SizedBox(height: 15),
-            StreamBuilder<List<Medic>>(
-              stream: SupabaseHandler.getAllMedicGroupStream(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+            FutureBuilder<myUser.User?>(
+              future: SupabaseHandler.getUser(Supabase.instance.client.auth.currentUser?.id ?? ''),
+              builder: (context, userSnapshot) {
+                if (userSnapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                var medicines = snapshot.data ?? [];
-                if (medicines.isEmpty) {
-                  return Center(child: Text("noMedic".tr()));
-                }
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 230,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: medicines.length > 5 ? 5 : medicines.length,
-                        itemBuilder: (context, index) => _buildProductCard(context, medicines[index]),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    /// 4. Product On Sale Section
-                    _buildSectionHeader("productOnSale".tr()),
-                    const SizedBox(height: 15),
-                    ...medicines.take(3).map((medic) => _buildProductCardVertical(context, medic)).toList(),
-                    const SizedBox(height: 20),
-                  ],
+                
+                final isOwner = userSnapshot.data?.pharmacy == true && userSnapshot.data?.pharma != null;
+                final ownerPharmaId = userSnapshot.data?.pharma;
+
+                return StreamBuilder<List<Pharma>>(
+                  stream: SupabaseHandler.getAllPharmaciesStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    var pharmacies = snapshot.data ?? [];
+                    
+                    if (isOwner) {
+                      pharmacies = pharmacies.where((p) => p.id == ownerPharmaId).toList();
+                    }
+                    
+                    if (searchQuery.isNotEmpty) {
+                      pharmacies = pharmacies.where((p) => p.title?.toLowerCase().contains(searchQuery) ?? false).toList();
+                    }
+                    
+                    if (pharmacies.isEmpty) {
+                      return Center(child: Text("noPharma".tr()));
+                    }
+                    return Column(
+                      children: pharmacies.map((pharma) => _buildPharmacyCardVertical(context, pharma)).toList(),
+                    );
+                  },
                 );
-              },
+              }
             ),
           ],
         ),
@@ -186,108 +174,57 @@ class HomeTap extends StatelessWidget {
     );
   }
 
-  Widget _buildProductCard(BuildContext context, Medic medic) {
-    return Container(
-      width: 150,
-      margin: const EdgeInsets.only(right: 15, bottom: 5),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.grey.shade100),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          )
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Center(
-              child: Icon(Icons.medication, size: 60, color: Colors.teal.shade200),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(medic.name ?? "",
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 5),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("\$${medic.price ?? 0}",
-                  style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.teal)),
-              InkWell(
-                onTap: () {
-                  Provider.of<CartProvider>(context, listen: false).addItem(medic);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${medic.name} added to cart!'),
-                      duration: const Duration(seconds: 1),
-                      backgroundColor: Colors.teal,
-                    ),
-                  );
-                },
-                child: const Icon(Icons.add_box, color: Colors.teal, size: 28),
+  Widget _buildPharmacyCardVertical(BuildContext context, Pharma pharma) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, PharmacyScreen.routeName, arguments: pharma);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade200),
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02),
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            )
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.teal.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
               ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProductCardVertical(BuildContext context, Medic medic) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade200),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.teal.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
+              child: const Icon(Icons.local_pharmacy, color: Colors.teal, size: 30),
             ),
-            child: const Icon(Icons.medical_services, color: Colors.teal),
-          ),
-          const SizedBox(width: 15),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(medic.name ?? "",
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              const SizedBox(height: 4),
-              Text("\$${medic.price ?? 0}",
-                  style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
-            ],
-          ),
-          const Spacer(),
-          InkWell(
-            onTap: () {
-              Provider.of<CartProvider>(context, listen: false).addItem(medic);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('${medic.name} added to cart!'),
-                  duration: const Duration(seconds: 1),
-                  backgroundColor: Colors.teal,
-                ),
-              );
-            },
-            child: const Icon(Icons.add_circle, color: Colors.teal, size: 32),
-          ),
-        ],
+            const SizedBox(width: 15),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(pharma.title ?? "",
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.orange, size: 14),
+                      const SizedBox(width: 4),
+                      Text("4.5", style: TextStyle(color: Colors.grey.shade700, fontSize: 12)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+          ],
+        ),
       ),
     );
   }
@@ -310,8 +247,9 @@ class HomeTap extends StatelessWidget {
 
     try {
       File imageFile = File(image.path);
-      // Use the actual Wi-Fi IP address so the physical phone can reach the computer
-      var uri = Uri.parse('http://192.168.1.13:8000/predict');
+      // Use the emulator local ip if testing on Android Simulator, or the specific Wi-Fi IP
+      // var uri = Uri.parse('http://10.0.2.2:8000/predict'); // Default to emulator localhost
+      var uri = Uri.parse('http://192.168.1.8:8000/predict'); // For physical device, uncomment and change
       var request = http.MultipartRequest('POST', uri);
       
       request.files.add(await http.MultipartFile.fromPath(
@@ -327,7 +265,10 @@ class HomeTap extends StatelessWidget {
       if (response.statusCode == 200) {
         var responseBody = await response.stream.bytesToString();
         var jsonResponse = jsonDecode(responseBody);
-        String recognizedText = jsonResponse['text'];
+        
+        // The API now returns a list of matches instead of just 'text'
+        List<dynamic> matchesDynamic = jsonResponse['matches'] ?? [jsonResponse['text']];
+        List<String> matches = matchesDynamic.map((e) => e.toString()).toList();
         
         // Show result
         showDialog(
@@ -335,7 +276,18 @@ class HomeTap extends StatelessWidget {
           builder: (BuildContext c) {
             return AlertDialog(
               title: const Text("Prescription Read Successfully!"),
-              content: Text("The AI Model Read:\n\n$recognizedText"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                   const Text("The AI Model found these likely medicines:"),
+                   const SizedBox(height: 10),
+                   ...matches.map((m) => Padding(
+                     padding: const EdgeInsets.symmetric(vertical: 4.0),
+                     child: Text("• $m", style: const TextStyle(fontWeight: FontWeight.bold)),
+                   )).toList(),
+                ],
+              ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(c),

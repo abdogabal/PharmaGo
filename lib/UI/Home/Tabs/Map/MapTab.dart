@@ -42,6 +42,7 @@ class _MapTabState extends State<MapTab> {
             initialCameraPosition: provider.cameraPosition,
             onMapCreated: (controller) {
               provider.googleMapController = controller;
+              provider.loadPharmaciesOnMap();
             },
             mapType: MapType.normal,
             markers: provider.markers,

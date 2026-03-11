@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../Providers/CartProvider.dart';
+import '../../../Models/Order.dart' as pharmaOrder;
+import '../../../Models/Medicines.dart';
+import '../../../core/SupabaseHandler.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PaymentScreen extends StatefulWidget {
   static const String routeName = "payment-screen";
@@ -316,7 +320,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  void _processPayment(BuildContext context, CartProvider cart) {
+  void _processPayment(BuildContext context, CartProvider cart) async {
     // Show a loading dialog
     showDialog(
       context: context,
@@ -326,8 +330,38 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
 
-    // Simulate network delay
-    Future.delayed(const Duration(seconds: 2), () {
+    try {
+      final userAuth = Supabase.instance.client.auth.currentUser;
+      if (userAuth == null) throw Exception("User not logged in");
+
+      final userData = await SupabaseHandler.getUser(userAuth.id);
+
+      final newOrder = pharmaOrder.Order(
+        userID: userAuth.id,
+        userName: userData?.name ?? "Unknown",
+        userNum: userData?.number ?? "",
+        fullPrice: cart.totalAmount,
+        finish: false,
+        time: DateTime.now(),
+      );
+
+      // Create a list of Medic items from cart
+      List<Medic> itemsToOrder = [];
+      cart.items.forEach((key, cartItem) {
+        // Build a Medic object mapped from cart properties
+        itemsToOrder.add(
+          Medic(
+            id: cartItem.medic.id,
+            name: cartItem.medic.name,
+            price: cartItem.medic.price,
+            quantity: cartItem.quantity.toDouble(), // store ordered quantity here temporarily
+          )
+        );
+      });
+
+      // Submit to Supabase
+      await SupabaseHandler.makeOrder(newOrder, itemsToOrder);
+
       Navigator.pop(context); // Close loading dialog
       
       // Clear cart
@@ -365,7 +399,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     ),
                   ),
                   onPressed: () {
-                    // Pop dialog and pop Payment Screen, back to Cart or Home
                     Navigator.pop(context); // pop dialog
                     Navigator.pop(context); // pop Payment screen back to Cart
                     Navigator.pop(context); // pop Cart screen back to Home
@@ -377,6 +410,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
         ),
       );
-    });
+    } catch (e) {
+      Navigator.pop(context); // pop loader
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error placing order: $e")));
+    }
   }
 }

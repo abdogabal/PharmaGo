@@ -1,0 +1,1705 @@
+{
+    "Povidone-Iodine": [
+        {
+            "name": "Betadine",
+            "price": 8.04,
+            "quantity": 29
+        },
+        {
+            "name": "Lights Povindone Iodine Scrub",
+            "price": 19.5,
+            "quantity": 96
+        },
+        {
+            "name": "Medichoice Povidone-Iodine Prep Pad",
+            "price": 31.77,
+            "quantity": 55
+        }
+    ],
+    "Benzalkonium Chloride": [
+        {
+            "name": "Moisturizing Antibacterial",
+            "price": 19.12,
+            "quantity": 100
+        },
+        {
+            "name": "Antibacterial 2X",
+            "price": 39.94,
+            "quantity": 15
+        },
+        {
+            "name": "Callington Anti-Bacterial Hand Sanitizer Wipe",
+            "price": 8.39,
+            "quantity": 37
+        },
+        {
+            "name": "Maxsaver Sanitizing Wipes",
+            "price": 11.95,
+            "quantity": 49
+        },
+        {
+            "name": "Kroger Antibacterial",
+            "price": 49.8,
+            "quantity": 69
+        },
+        {
+            "name": "Kroger Springwater Antibacterial",
+            "price": 49.31,
+            "quantity": 18
+        },
+        {
+            "name": "Kroger Antibacterial Lhs",
+            "price": 7.47,
+            "quantity": 37
+        },
+        {
+            "name": "Fomin Mini Hand Sanitizer Wipes Fragrance Free",
+            "price": 23.66,
+            "quantity": 66
+        },
+        {
+            "name": "Dermadive Ultracare - Tetraid",
+            "price": 32.8,
+            "quantity": 45
+        },
+        {
+            "name": "Simplify Antibacterial Hand Wipes",
+            "price": 45.7,
+            "quantity": 33
+        },
+        {
+            "name": "Ecolab",
+            "price": 11.38,
+            "quantity": 26
+        },
+        {
+            "name": "Medpride Sterile",
+            "price": 10.23,
+            "quantity": 35
+        }
+    ],
+    "Salicylic Acid": [
+        {
+            "name": "Quick Action",
+            "price": 48.52,
+            "quantity": 78
+        },
+        {
+            "name": "Cerave Developed With Dermatologists Acne Control Cleanser",
+            "price": 32.6,
+            "quantity": 15
+        },
+        {
+            "name": "Replenix Gly-Sal 10-2 Cleanser",
+            "price": 45.73,
+            "quantity": 17
+        },
+        {
+            "name": "First Aid Beauty Fab Acne Spot Treatment",
+            "price": 40.36,
+            "quantity": 56
+        },
+        {
+            "name": "Acne Calming Water Cream",
+            "price": 7.19,
+            "quantity": 78
+        },
+        {
+            "name": "Dercos Salicylic Acid Anti-Dandruff Serum",
+            "price": 19.0,
+            "quantity": 46
+        },
+        {
+            "name": "Dermatouch Acnecare Facial Scrub",
+            "price": 9.41,
+            "quantity": 26
+        },
+        {
+            "name": "Dermatouch Acnecare Pads",
+            "price": 23.22,
+            "quantity": 56
+        },
+        {
+            "name": "Shailee Psoriasis Treatment",
+            "price": 6.26,
+            "quantity": 42
+        },
+        {
+            "name": "Even Better Clinical Acne Solutions",
+            "price": 20.56,
+            "quantity": 14
+        }
+    ],
+    "Hydrocortisone": [
+        {
+            "name": "Anti Itch",
+            "price": 6.37,
+            "quantity": 89
+        },
+        {
+            "name": "Hydrocortisone",
+            "price": 19.02,
+            "quantity": 45
+        },
+        {
+            "name": "Theracare Hydrocortisone Cream",
+            "price": 32.65,
+            "quantity": 94
+        },
+        {
+            "name": "Cortizone 10 Fast Acting Itch Relief Cooling",
+            "price": 6.94,
+            "quantity": 97
+        },
+        {
+            "name": "Dermarest Eczema Medicated",
+            "price": 33.62,
+            "quantity": 80
+        }
+    ],
+    "Varenicline": [
+        {
+            "name": "Varenicline",
+            "price": 37.93,
+            "quantity": 38
+        },
+        {
+            "name": "Tyrvaya",
+            "price": 39.31,
+            "quantity": 54
+        }
+    ],
+    "Acetaminophen": [
+        {
+            "name": "Pain Reliever Extra Strength",
+            "price": 20.55,
+            "quantity": 61
+        },
+        {
+            "name": "Basic Care Acetaminophen",
+            "price": 47.82,
+            "quantity": 95
+        },
+        {
+            "name": "Acetaminophen",
+            "price": 9.36,
+            "quantity": 77
+        },
+        {
+            "name": "Extra Strength Pain Relief",
+            "price": 24.46,
+            "quantity": 76
+        },
+        {
+            "name": "Childrens Pain Relief",
+            "price": 19.02,
+            "quantity": 78
+        },
+        {
+            "name": "Tylenol Extra Strength",
+            "price": 6.57,
+            "quantity": 46
+        },
+        {
+            "name": "Tylenol Regular Strength",
+            "price": 28.47,
+            "quantity": 79
+        }
+    ],
+    "Glycerin": [
+        {
+            "name": "Oasis Tears Lubricant Eye",
+            "price": 49.02,
+            "quantity": 99
+        },
+        {
+            "name": "La Roche Posay Laboratoire Dermatologique Cicaplast Defense B5",
+            "price": 14.68,
+            "quantity": 62
+        },
+        {
+            "name": "Glycerin",
+            "price": 5.57,
+            "quantity": 20
+        }
+    ],
+    "Aluminum Chlorohydrate": [
+        {
+            "name": "Sure Complete Confidence Antiperspirant Deodorant Aerosol, Unscented",
+            "price": 17.86,
+            "quantity": 74
+        },
+        {
+            "name": "Roll On Anti-Perspirant (Alcohol Free)",
+            "price": 9.74,
+            "quantity": 81
+        }
+    ],
+    "Sodium Fluoride": [
+        {
+            "name": "Anticavity Rinse",
+            "price": 18.25,
+            "quantity": 91
+        },
+        {
+            "name": "Prime Tooth Care Hami Melon",
+            "price": 18.5,
+            "quantity": 86
+        },
+        {
+            "name": "Colgate Max Fresh Cool Mint",
+            "price": 34.87,
+            "quantity": 58
+        },
+        {
+            "name": "Colgate Max Fresh Advanced Whitening",
+            "price": 35.29,
+            "quantity": 63
+        },
+        {
+            "name": "Gelato Apf",
+            "price": 24.59,
+            "quantity": 75
+        },
+        {
+            "name": "Colgate Junior Kids Batman Mild Bubble Fruit Fluoride",
+            "price": 26.42,
+            "quantity": 77
+        },
+        {
+            "name": "Crest Kids Sparklefun Bubblegum",
+            "price": 36.69,
+            "quantity": 71
+        },
+        {
+            "name": "Crest 3D White Fresh Mint",
+            "price": 13.7,
+            "quantity": 56
+        },
+        {
+            "name": "Crest Strawberry",
+            "price": 35.76,
+            "quantity": 92
+        },
+        {
+            "name": "Crest Bubblegum",
+            "price": 44.23,
+            "quantity": 32
+        },
+        {
+            "name": "Crest Complete Multi-Benefit Whitening Plus Scope",
+            "price": 42.34,
+            "quantity": 40
+        },
+        {
+            "name": "Brush Buddies Spidey And His Amazing Friends Anticavity Fluoride-Spidey Punch",
+            "price": 23.58,
+            "quantity": 81
+        }
+    ],
+    "Esomeprazole Magnesium": [
+        {
+            "name": "Acid Reducer",
+            "price": 24.94,
+            "quantity": 52
+        },
+        {
+            "name": "Esomeprazole Magnesium",
+            "price": 12.38,
+            "quantity": 10
+        }
+    ],
+    "Isopropyl Alcohol": [
+        {
+            "name": "Isopropyl Alcohol",
+            "price": 7.22,
+            "quantity": 31
+        },
+        {
+            "name": "Dukal Sterile Alcohol Prep Pad",
+            "price": 28.77,
+            "quantity": 17
+        },
+        {
+            "name": "Dollar General",
+            "price": 32.99,
+            "quantity": 99
+        },
+        {
+            "name": "Sm Swabalpha",
+            "price": 31.09,
+            "quantity": 63
+        }
+    ],
+    "Chloroxylenol": [
+        {
+            "name": "Suds High Foaming Antiseptic Hand And Body Wash",
+            "price": 20.29,
+            "quantity": 42
+        },
+        {
+            "name": "Hand Guard High Foaming Antiseptic Hand And Body Wash",
+            "price": 34.89,
+            "quantity": 68
+        },
+        {
+            "name": "Sierrasoft Clear Antibacterial Wash Foam",
+            "price": 37.25,
+            "quantity": 13
+        },
+        {
+            "name": "Simplify Antibacterial Hand Apple Blossom Scent",
+            "price": 10.91,
+            "quantity": 77
+        },
+        {
+            "name": "Gojo Rich Pink Antibacterial Ltn Sp",
+            "price": 48.42,
+            "quantity": 94
+        },
+        {
+            "name": "Dawn Ultra Antibacterial Hand Apple Blossom Scent",
+            "price": 7.42,
+            "quantity": 50
+        }
+    ],
+    "Avobenzone, Homosalate, Octisalate, And Octocrylene": [
+        {
+            "name": "Olay Regenerist Regenerating With Sunscreen Broad Spectrum Spf 15",
+            "price": 23.62,
+            "quantity": 44
+        },
+        {
+            "name": "Shiseido Ultimate Sun Protector",
+            "price": 47.23,
+            "quantity": 96
+        },
+        {
+            "name": "Loreal Paris Revitalift Derm Intensives Invisible Uv Fluid Broad Spectrum Spf 50 Sunscreen",
+            "price": 9.58,
+            "quantity": 43
+        }
+    ],
+    "Zinc Oxide": [
+        {
+            "name": "Attitude Diaper Cream Zinc Unscented",
+            "price": 41.62,
+            "quantity": 52
+        },
+        {
+            "name": "Eminence Radiant Protection Spf Fluid",
+            "price": 6.43,
+            "quantity": 44
+        },
+        {
+            "name": "Botnia Gentle Sun Spf 30",
+            "price": 14.4,
+            "quantity": 21
+        },
+        {
+            "name": "Balmere Mineral Sunscreen Moisturizer Primer",
+            "price": 32.72,
+            "quantity": 26
+        },
+        {
+            "name": "Colorescience Total Protection No Show Mineral Sunscreen",
+            "price": 32.74,
+            "quantity": 75
+        },
+        {
+            "name": "Diaper Rash",
+            "price": 37.65,
+            "quantity": 95
+        },
+        {
+            "name": "Inde Wild",
+            "price": 31.55,
+            "quantity": 12
+        },
+        {
+            "name": "Sol Science The Fifty",
+            "price": 29.48,
+            "quantity": 67
+        },
+        {
+            "name": "Ciele Blush And Protect",
+            "price": 23.96,
+            "quantity": 15
+        },
+        {
+            "name": "Ciele Tint And Protect",
+            "price": 40.96,
+            "quantity": 61
+        },
+        {
+            "name": "Isa Knox Anew Solaire Everyday Mineral Face Protection Broad Spectrum Spf 50 Sunscreen",
+            "price": 18.46,
+            "quantity": 60
+        },
+        {
+            "name": "Baby Mineral Sunscreen Spf55",
+            "price": 40.13,
+            "quantity": 48
+        },
+        {
+            "name": "Baby Mineral Sunscreen Probiotics Spf55",
+            "price": 15.9,
+            "quantity": 35
+        },
+        {
+            "name": "Mineral Sunscreen Spf 50",
+            "price": 41.53,
+            "quantity": 37
+        },
+        {
+            "name": "Kids Face And Body Sunscreen Spf 50",
+            "price": 40.09,
+            "quantity": 39
+        },
+        {
+            "name": "Native Mineral Sunscreen Broad Spectrum Spf 30 Sweet Peach And Nectar",
+            "price": 42.92,
+            "quantity": 27
+        },
+        {
+            "name": "Skinfuse Shield Spf 30",
+            "price": 7.66,
+            "quantity": 59
+        },
+        {
+            "name": "Oneskin Os-01 Shield Broad Spectrum Spf 30 Mineral Sunscreen Tinted",
+            "price": 46.34,
+            "quantity": 43
+        }
+    ],
+    "Menthol": [
+        {
+            "name": "Equate Honey Lemon Cough Drops",
+            "price": 37.36,
+            "quantity": 22
+        },
+        {
+            "name": "Equate Sf Menthol Cough Drops",
+            "price": 27.45,
+            "quantity": 84
+        },
+        {
+            "name": "Insect Bite Relief 01",
+            "price": 39.09,
+            "quantity": 82
+        },
+        {
+            "name": "Magsoothium Cbd Body",
+            "price": 27.96,
+            "quantity": 53
+        },
+        {
+            "name": "Biofreeze",
+            "price": 17.69,
+            "quantity": 87
+        },
+        {
+            "name": "Careall Musle And Joint",
+            "price": 36.47,
+            "quantity": 51
+        },
+        {
+            "name": "Cannarelief 1000Mg",
+            "price": 8.65,
+            "quantity": 69
+        },
+        {
+            "name": "Cannarelief 2000Mg",
+            "price": 30.03,
+            "quantity": 91
+        },
+        {
+            "name": "Healing Hand Cream 2000Mg",
+            "price": 40.86,
+            "quantity": 94
+        },
+        {
+            "name": "Mentho Patch Cool",
+            "price": 39.36,
+            "quantity": 61
+        },
+        {
+            "name": "Smooth Gator Head-Ezz Analgesic",
+            "price": 33.98,
+            "quantity": 46
+        }
+    ],
+    "Nitisinone": [
+        {
+            "name": "Orfadin",
+            "price": 8.98,
+            "quantity": 85
+        },
+        {
+            "name": "Nityr",
+            "price": 5.03,
+            "quantity": 33
+        }
+    ],
+    "Titanium Dioxide, Zinc Oxide": [
+        {
+            "name": "Neutrogena Mineral Invisible Daily Defense Face Sunscreen Broad Spectrum Spf 30",
+            "price": 49.59,
+            "quantity": 61
+        },
+        {
+            "name": "Luminous Eye Corrector Spf 41 - Medium",
+            "price": 38.01,
+            "quantity": 93
+        },
+        {
+            "name": "Dr.Jart Every Sun Day Mineral Sun Screen",
+            "price": 12.65,
+            "quantity": 52
+        }
+    ],
+    "Diphenhydramine Hcl": [
+        {
+            "name": "Childrens Allergy Relief",
+            "price": 25.54,
+            "quantity": 53
+        },
+        {
+            "name": "Allergy Relief",
+            "price": 38.31,
+            "quantity": 98
+        },
+        {
+            "name": "Nighttime Sleep Aid",
+            "price": 23.94,
+            "quantity": 12
+        },
+        {
+            "name": "Basic Care Nighttime Sleep Aid",
+            "price": 29.09,
+            "quantity": 66
+        }
+    ],
+    "Lamotrigine": [
+        {
+            "name": "Lamotrigine",
+            "price": 7.58,
+            "quantity": 71
+        },
+        {
+            "name": "Subvenite",
+            "price": 42.19,
+            "quantity": 16
+        }
+    ],
+    "Loratadine": [
+        {
+            "name": "Allergy Relief",
+            "price": 35.71,
+            "quantity": 38
+        },
+        {
+            "name": "Loratadine",
+            "price": 6.49,
+            "quantity": 21
+        },
+        {
+            "name": "Dye-Free Childrens Loratadine",
+            "price": 37.86,
+            "quantity": 50
+        },
+        {
+            "name": "Nuvicare-Allergy Relief Loratadine Tablets, 10 Mg",
+            "price": 40.9,
+            "quantity": 27
+        }
+    ],
+    "Octinoxate, Oxybenzone": [
+        {
+            "name": "Artistry Youth Xtend Lifting Smoothing Foundation Shade Chiffon L2C1",
+            "price": 41.5,
+            "quantity": 24
+        },
+        {
+            "name": "Artistry Youth Xtend Lifting Smoothing Foundation Shade Natural L2N2",
+            "price": 49.78,
+            "quantity": 29
+        }
+    ],
+    "Nicotine Polacrilex": [
+        {
+            "name": "Nicotine Polacrilex",
+            "price": 11.45,
+            "quantity": 85
+        },
+        {
+            "name": "Equate Nicotine",
+            "price": 12.04,
+            "quantity": 81
+        },
+        {
+            "name": "Nicotine",
+            "price": 8.45,
+            "quantity": 54
+        },
+        {
+            "name": "Exchange Select Nicotine",
+            "price": 9.03,
+            "quantity": 60
+        }
+    ],
+    "Pyrithione Zinc": [
+        {
+            "name": "Head And Shoulders Bare Minimal Ingredients",
+            "price": 47.06,
+            "quantity": 71
+        },
+        {
+            "name": "Head And Shoulders Bare Minimal Ingredients Soothing Hydration",
+            "price": 47.88,
+            "quantity": 55
+        },
+        {
+            "name": "Equate Dry Scalp 2 In 1 Dandruff Anti-Dandruff",
+            "price": 45.01,
+            "quantity": 52
+        },
+        {
+            "name": "Clean Apple",
+            "price": 47.1,
+            "quantity": 72
+        }
+    ],
+    "Sunscreen": [
+        {
+            "name": "Private Label Moisturizing Oil Free Paraben Free Spf43",
+            "price": 35.02,
+            "quantity": 98
+        },
+        {
+            "name": "Kids Mineral Sunscreen Spf50",
+            "price": 36.22,
+            "quantity": 27
+        }
+    ],
+    "Polyethylene Glycol 400, Propylene Glycol": [
+        {
+            "name": "Foster And Thrive Lubricating Tears Lubricant Eye Drops",
+            "price": 13.85,
+            "quantity": 22
+        },
+        {
+            "name": "Foster And Thrive Long Lasting Lubricant Eye Drops",
+            "price": 15.43,
+            "quantity": 73
+        }
+    ],
+    "Acetaminophen, Dextromethorphan Hbr, Phenylephrine Hcl": [
+        {
+            "name": "Daytime Cold And Flu",
+            "price": 19.8,
+            "quantity": 23
+        },
+        {
+            "name": "Good Sense Daytime Non Drowsy Cold And Flu",
+            "price": 12.12,
+            "quantity": 20
+        }
+    ],
+    "Dimethicone": [
+        {
+            "name": "Baby Xtracare Oatmeal",
+            "price": 24.23,
+            "quantity": 69
+        },
+        {
+            "name": "Remedy Barrier Cream Cloths Fragrance Free",
+            "price": 41.73,
+            "quantity": 93
+        },
+        {
+            "name": "Aveeno Baby Calming Comfort",
+            "price": 15.02,
+            "quantity": 42
+        }
+    ],
+    "Alcohol": [
+        {
+            "name": "Degasa Hand Sanitizer Lemon Lime Scent",
+            "price": 38.39,
+            "quantity": 75
+        },
+        {
+            "name": "Symmetry Foaming Hand Sanitizer-Fragrance Free With Aloe And Vitamin E",
+            "price": 23.74,
+            "quantity": 88
+        },
+        {
+            "name": "Justice Berry Scented Anti-Bacterial Hand Sanitizer Bff",
+            "price": 10.15,
+            "quantity": 26
+        },
+        {
+            "name": "Avagard D",
+            "price": 24.07,
+            "quantity": 56
+        },
+        {
+            "name": "Antiseptic Hand Sanitizer Ethyl Alcohol",
+            "price": 19.25,
+            "quantity": 29
+        },
+        {
+            "name": "Instant Hand Sanitizer",
+            "price": 35.74,
+            "quantity": 95
+        },
+        {
+            "name": "Amcon Labs Hand Sanitizer Light Cleansing",
+            "price": 42.48,
+            "quantity": 13
+        },
+        {
+            "name": "Amcon Labs Hand Sanitizer Instant Foam Sanitizer With Alcohol",
+            "price": 44.86,
+            "quantity": 45
+        },
+        {
+            "name": "Amcon Labs Hand Sanitizer Fragrance Free Gel Sanitizer",
+            "price": 24.52,
+            "quantity": 56
+        },
+        {
+            "name": "Careall Hand Sanitizer",
+            "price": 28.02,
+            "quantity": 18
+        }
+    ],
+    "Dextromethorphan Hbr, Guaifenesin": [
+        {
+            "name": "Rompe Pechito Dm For Kids",
+            "price": 16.22,
+            "quantity": 50
+        },
+        {
+            "name": "Good Neighbor Sugar Free Adult Tussin Dm Cough And Chest Congestion",
+            "price": 21.07,
+            "quantity": 32
+        }
+    ],
+    "Glycerin 14.4%, Lidocaine 5%, Petrolatum 15%, Phenylephrine Hcl 0.25%": [
+        {
+            "name": "Dch Hemorrhoidal",
+            "price": 44.51,
+            "quantity": 21
+        },
+        {
+            "name": "Revivol Hemorrhoid And Fissure",
+            "price": 9.83,
+            "quantity": 54
+        }
+    ],
+    "Simethicone": [
+        {
+            "name": "Gas Relief Ultra Strength",
+            "price": 46.9,
+            "quantity": 97
+        },
+        {
+            "name": "Gas Relief",
+            "price": 38.69,
+            "quantity": 92
+        },
+        {
+            "name": "Leader Gas Relief",
+            "price": 32.97,
+            "quantity": 69
+        },
+        {
+            "name": "Gas Relief Extra Strength",
+            "price": 40.86,
+            "quantity": 46
+        },
+        {
+            "name": "Extra Strength Gas Relief",
+            "price": 39.79,
+            "quantity": 85
+        }
+    ],
+    "Lidocaine Hydrochloride": [
+        {
+            "name": "Lidocaine Hydrochloride",
+            "price": 45.49,
+            "quantity": 37
+        },
+        {
+            "name": "Accucaine",
+            "price": 15.8,
+            "quantity": 35
+        },
+        {
+            "name": "Alocane Botanicals",
+            "price": 40.78,
+            "quantity": 30
+        }
+    ],
+    "Diclofenac Sodium": [
+        {
+            "name": "Diclofenac Sodium",
+            "price": 39.01,
+            "quantity": 38
+        },
+        {
+            "name": "Arthritis Pain Reliever",
+            "price": 16.99,
+            "quantity": 56
+        }
+    ],
+    "Aspirin": [
+        {
+            "name": "Low Dose Aspirin",
+            "price": 38.91,
+            "quantity": 38
+        },
+        {
+            "name": "Rapidol Aspirin",
+            "price": 40.88,
+            "quantity": 66
+        },
+        {
+            "name": "Aspirin Low Dose",
+            "price": 46.39,
+            "quantity": 46
+        }
+    ],
+    "Prednisone": [
+        {
+            "name": "Prednisone",
+            "price": 49.79,
+            "quantity": 90
+        },
+        {
+            "name": "Prednisone Delayed Release",
+            "price": 29.26,
+            "quantity": 18
+        }
+    ],
+    "Potassium Chloride": [
+        {
+            "name": "Potassium Chloride",
+            "price": 29.53,
+            "quantity": 98
+        },
+        {
+            "name": "Potassium Chloride Extended-Release",
+            "price": 19.56,
+            "quantity": 73
+        }
+    ],
+    "Duloxetine Hydrochloride": [
+        {
+            "name": "Duloxetine Delayed-Release",
+            "price": 19.93,
+            "quantity": 76
+        },
+        {
+            "name": "Duloxetine",
+            "price": 11.14,
+            "quantity": 100
+        }
+    ],
+    "Ibuprofen": [
+        {
+            "name": "Ibuprofen Dye Free",
+            "price": 30.35,
+            "quantity": 15
+        },
+        {
+            "name": "Care One Ibuprofen",
+            "price": 42.81,
+            "quantity": 39
+        },
+        {
+            "name": "Ibuprofen",
+            "price": 10.46,
+            "quantity": 22
+        },
+        {
+            "name": "Leader Ibuprofen",
+            "price": 25.42,
+            "quantity": 21
+        },
+        {
+            "name": "Concentrated Ibuprofen Infants",
+            "price": 14.79,
+            "quantity": 29
+        },
+        {
+            "name": "Topcare Infants Ibuprofen",
+            "price": 5.32,
+            "quantity": 92
+        },
+        {
+            "name": "Equate Ibuprofen",
+            "price": 7.61,
+            "quantity": 84
+        },
+        {
+            "name": "Childrens Ibuprofen",
+            "price": 16.48,
+            "quantity": 25
+        }
+    ],
+    "Polyethylene Glycol 3350": [
+        {
+            "name": "Purelax",
+            "price": 15.72,
+            "quantity": 41
+        },
+        {
+            "name": "Comfortlax",
+            "price": 9.41,
+            "quantity": 45
+        },
+        {
+            "name": "Polyethylene Glycol 3350",
+            "price": 40.71,
+            "quantity": 35
+        },
+        {
+            "name": "Topcare Clearlax",
+            "price": 19.02,
+            "quantity": 76
+        }
+    ],
+    "Benzocaine": [
+        {
+            "name": "Gelato Topical Anesthetic",
+            "price": 14.43,
+            "quantity": 34
+        },
+        {
+            "name": "Anestenka",
+            "price": 33.82,
+            "quantity": 38
+        },
+        {
+            "name": "Primo Topical Anesthetic",
+            "price": 15.29,
+            "quantity": 40
+        },
+        {
+            "name": "Candee Caine Topical Anesthetic",
+            "price": 39.2,
+            "quantity": 74
+        }
+    ],
+    "Bacitracin Zinc, Neomycin Sulfate, Polymyxin B Sulfate": [
+        {
+            "name": "Health And .Beyond Triple Antibiotic",
+            "price": 9.55,
+            "quantity": 81
+        },
+        {
+            "name": "Unishield Triple Antibiotic",
+            "price": 18.75,
+            "quantity": 45
+        }
+    ],
+    "Lidocaine": [
+        {
+            "name": "Lidocaine",
+            "price": 30.76,
+            "quantity": 81
+        },
+        {
+            "name": "Aspercreme With Lidocaine Dry",
+            "price": 10.36,
+            "quantity": 73
+        },
+        {
+            "name": "Pain Relieving Lidocaine Patch",
+            "price": 25.93,
+            "quantity": 41
+        },
+        {
+            "name": "Lidocaine Pain Relief Gel-Patch",
+            "price": 15.28,
+            "quantity": 69
+        },
+        {
+            "name": "Lidocaine Pain Relief Patch 5 Ct",
+            "price": 29.46,
+            "quantity": 34
+        },
+        {
+            "name": "Fast Freeze Lidocaine",
+            "price": 46.65,
+            "quantity": 68
+        }
+    ],
+    "White Petrolatum": [
+        {
+            "name": "Medline",
+            "price": 34.52,
+            "quantity": 56
+        },
+        {
+            "name": "Petroleum Jelly",
+            "price": 44.99,
+            "quantity": 32
+        },
+        {
+            "name": "Crash Cream",
+            "price": 12.6,
+            "quantity": 80
+        }
+    ],
+    "Rizatriptan Benzoate": [
+        {
+            "name": "Maxalt",
+            "price": 8.87,
+            "quantity": 20
+        },
+        {
+            "name": "Rizatriptan Benzoate",
+            "price": 9.09,
+            "quantity": 67
+        }
+    ],
+    "Leuprolide Acetate": [
+        {
+            "name": "Vabrinty",
+            "price": 10.25,
+            "quantity": 33
+        },
+        {
+            "name": "Lupron Depot",
+            "price": 11.86,
+            "quantity": 100
+        }
+    ],
+    "Capsaicin": [
+        {
+            "name": "Capsaicin 0.1 Percent",
+            "price": 22.43,
+            "quantity": 36
+        },
+        {
+            "name": "Nufabrx Medicine Infused Socks",
+            "price": 24.36,
+            "quantity": 24
+        },
+        {
+            "name": "Nufabrx Medicine Infused Ankle Sleeve",
+            "price": 24.64,
+            "quantity": 48
+        }
+    ],
+    "Ethyl Alcohol": [
+        {
+            "name": "Fresh Feels Hand Sanitizer Mist Ocean Breeze Scent",
+            "price": 34.9,
+            "quantity": 71
+        },
+        {
+            "name": "Sierra Soft Alcohol Hand Sanitizer",
+            "price": 47.19,
+            "quantity": 54
+        },
+        {
+            "name": "Xtracare Cucumber Melon",
+            "price": 15.89,
+            "quantity": 97
+        },
+        {
+            "name": "Smart Care Coco Cabana Hand Sanitizer",
+            "price": 31.32,
+            "quantity": 76
+        }
+    ],
+    "Naproxen Sodium": [
+        {
+            "name": "Up And Up Naproxen Sodium",
+            "price": 33.02,
+            "quantity": 88
+        },
+        {
+            "name": "Aleve",
+            "price": 48.03,
+            "quantity": 27
+        },
+        {
+            "name": "Foster And Thrive All Day Pain Relief",
+            "price": 33.26,
+            "quantity": 37
+        },
+        {
+            "name": "Aleve Caplets",
+            "price": 10.3,
+            "quantity": 13
+        }
+    ],
+    "Guaifenesin": [
+        {
+            "name": "Guaifenesin",
+            "price": 7.95,
+            "quantity": 81
+        },
+        {
+            "name": "Mucinex",
+            "price": 46.31,
+            "quantity": 96
+        },
+        {
+            "name": "Mucus Relief",
+            "price": 24.73,
+            "quantity": 83
+        }
+    ],
+    "Minoxidil": [
+        {
+            "name": "Hair Regrowth Treatment",
+            "price": 21.16,
+            "quantity": 17
+        },
+        {
+            "name": "Kirkland Signature Minoxidil",
+            "price": 42.79,
+            "quantity": 27
+        },
+        {
+            "name": "Gainxtra Hair Regrowth Treatment For Men And Women Minoxidil 5% Form With Biotin",
+            "price": 23.79,
+            "quantity": 44
+        },
+        {
+            "name": "Minoxidil",
+            "price": 5.9,
+            "quantity": 43
+        }
+    ],
+    "Caffeine": [
+        {
+            "name": "Stay Awake",
+            "price": 22.69,
+            "quantity": 32
+        },
+        {
+            "name": "Uplift Chewable",
+            "price": 5.73,
+            "quantity": 46
+        }
+    ],
+    "Metoprolol Tartrate": [
+        {
+            "name": "Metoprolol Tartrate",
+            "price": 21.27,
+            "quantity": 20
+        },
+        {
+            "name": "Lopressor",
+            "price": 31.92,
+            "quantity": 32
+        }
+    ],
+    "Avobenzone, Homosalate, Octisalate, Octocrylene": [
+        {
+            "name": "Sunscreen",
+            "price": 20.73,
+            "quantity": 57
+        },
+        {
+            "name": "Isa Knox Anew Solaire Everyday Face Protection Broad Spectrum Spf 50 Sunscreen",
+            "price": 47.79,
+            "quantity": 39
+        },
+        {
+            "name": "Sun Bum Spf 15 Premium Moisturizing Sunscreen",
+            "price": 38.78,
+            "quantity": 62
+        },
+        {
+            "name": "Seonglow Daily Moisturizing Sunscreen Spf 50",
+            "price": 8.36,
+            "quantity": 84
+        },
+        {
+            "name": "Roc Barrier Renew Am Moisturizer Spf 30",
+            "price": 31.56,
+            "quantity": 41
+        },
+        {
+            "name": "Belif The True Cream Aqua Bomb Sunscreen Broad Spectrum Spf 50",
+            "price": 18.94,
+            "quantity": 70
+        },
+        {
+            "name": "Alba Botanica Maximum Sunscreen Spf 70",
+            "price": 34.55,
+            "quantity": 97
+        }
+    ],
+    "Lidocaine 4%": [
+        {
+            "name": "Dch Pain Relief",
+            "price": 26.75,
+            "quantity": 61
+        },
+        {
+            "name": "Healthwise Pain Relief Lidocaine Patch",
+            "price": 25.47,
+            "quantity": 20
+        },
+        {
+            "name": "Equate Pain Relieving Patches",
+            "price": 12.0,
+            "quantity": 45
+        },
+        {
+            "name": "Pain Reliveing Patch",
+            "price": 48.91,
+            "quantity": 12
+        }
+    ],
+    "Diphenhydramine Hydrochloride": [
+        {
+            "name": "Diphenhydramine",
+            "price": 32.92,
+            "quantity": 52
+        },
+        {
+            "name": "Vicks Zzzquil Nighttime Sleep-Aid Diphenhydramine Hcl Free Of",
+            "price": 40.32,
+            "quantity": 53
+        },
+        {
+            "name": "Good Neighbor Pharmacy Childrens Allergy",
+            "price": 29.81,
+            "quantity": 15
+        },
+        {
+            "name": "Diphenhydramine Hydrochloride",
+            "price": 43.74,
+            "quantity": 25
+        }
+    ],
+    "Benzoyl Peroxide": [
+        {
+            "name": "Dr. Zenovia Acne Cleanser",
+            "price": 41.67,
+            "quantity": 99
+        },
+        {
+            "name": "Vie Naturelle Acne Body",
+            "price": 44.63,
+            "quantity": 15
+        }
+    ],
+    "Calcium Carbonate": [
+        {
+            "name": "Antacid",
+            "price": 10.68,
+            "quantity": 82
+        },
+        {
+            "name": "Family Wellness Ultra Stregth Antacid 171Ab",
+            "price": 39.92,
+            "quantity": 27
+        },
+        {
+            "name": "Soothe Childrens",
+            "price": 11.74,
+            "quantity": 53
+        }
+    ],
+    "Olopatadine Hydrochloride Ophthalmic Solution": [
+        {
+            "name": "Equate Olopatadine Hydrochloride Ophthalmic Solution",
+            "price": 33.9,
+            "quantity": 35
+        },
+        {
+            "name": "Olopatadine Hydrochloride Ophthalmic Solution",
+            "price": 38.87,
+            "quantity": 17
+        }
+    ],
+    "Titanium Oxide, Zinc Oxide": [
+        {
+            "name": "Naked Sundays Cabana Glow Mineral Glow Serum Drops Bronze 40Ml With Wild Rosella Spf 50",
+            "price": 22.77,
+            "quantity": 73
+        },
+        {
+            "name": "Naked Sundays Cabana Glow Mineral Glow Serum Drops Illuminating 40Ml With Pink Algae Spf 50",
+            "price": 6.44,
+            "quantity": 26
+        },
+        {
+            "name": "Naked Sundays Cabana Glow Mineral Glow Serum Drops Pearl 40Ml With Pink Algae Spf 50",
+            "price": 27.13,
+            "quantity": 68
+        }
+    ],
+    "Sumatriptan": [
+        {
+            "name": "Sumatriptan",
+            "price": 8.46,
+            "quantity": 87
+        },
+        {
+            "name": "Tosymra",
+            "price": 17.79,
+            "quantity": 67
+        }
+    ],
+    "Estradiol": [
+        {
+            "name": "Estradiol Vaginal",
+            "price": 49.43,
+            "quantity": 88
+        },
+        {
+            "name": "Estradiol",
+            "price": 39.99,
+            "quantity": 84
+        }
+    ],
+    "Cetirizine Hydrochloride": [
+        {
+            "name": "Childrens Zyrtec",
+            "price": 8.77,
+            "quantity": 99
+        },
+        {
+            "name": "Childrens Cetirizine Hydrochloride Sugar Free Grape",
+            "price": 16.82,
+            "quantity": 51
+        }
+    ],
+    "Bismuth Subsalicylate": [
+        {
+            "name": "Bismuth",
+            "price": 41.87,
+            "quantity": 68
+        },
+        {
+            "name": "Stomach Relief",
+            "price": 23.49,
+            "quantity": 61
+        },
+        {
+            "name": "Pepto-Bismol",
+            "price": 18.13,
+            "quantity": 84
+        },
+        {
+            "name": "Qc Anti Diarrheal Vanilla Regular Flavor",
+            "price": 15.45,
+            "quantity": 54
+        },
+        {
+            "name": "Heb Stomach Relief Cherry",
+            "price": 32.89,
+            "quantity": 65
+        }
+    ],
+    "Bisacodyl": [
+        {
+            "name": "Dulcolax Laxative",
+            "price": 46.8,
+            "quantity": 26
+        },
+        {
+            "name": "Stimulant Laxative Enteric Coated",
+            "price": 41.34,
+            "quantity": 20
+        },
+        {
+            "name": "Laxative",
+            "price": 12.1,
+            "quantity": 55
+        },
+        {
+            "name": "Publix Stimulant Laxative",
+            "price": 20.19,
+            "quantity": 38
+        }
+    ],
+    "Aluminum Zirconium Tetrachlorohydrex Gly": [
+        {
+            "name": "Mens Speed Stick Fresh Rush - Antiperspirant/Deodorant",
+            "price": 43.82,
+            "quantity": 41
+        },
+        {
+            "name": "Old Spice Sharkhammer",
+            "price": 38.14,
+            "quantity": 50
+        },
+        {
+            "name": "Old Spice Harbor",
+            "price": 21.57,
+            "quantity": 76
+        }
+    ],
+    "Wart Remover": [
+        {
+            "name": "Verucide Wart Remover Kit",
+            "price": 6.95,
+            "quantity": 44
+        },
+        {
+            "name": "Salicylic Acid",
+            "price": 20.48,
+            "quantity": 37
+        }
+    ],
+    "Piperonyl Butoxide, Pyrethrum Extract": [
+        {
+            "name": "Herklin Lice Treatment",
+            "price": 7.28,
+            "quantity": 16
+        },
+        {
+            "name": "Meijer Lice Killing",
+            "price": 48.07,
+            "quantity": 44
+        }
+    ],
+    "Acetaminophen, Guaifenesin, And Phenylephrine Hydrochloride": [
+        {
+            "name": "Cold Plus Flu Congestion Severe",
+            "price": 31.74,
+            "quantity": 74
+        },
+        {
+            "name": "Sinus Severe",
+            "price": 19.34,
+            "quantity": 68
+        }
+    ],
+    "Nystatin": [
+        {
+            "name": "Nyamyc",
+            "price": 6.74,
+            "quantity": 80
+        },
+        {
+            "name": "Nystatin",
+            "price": 30.71,
+            "quantity": 39
+        }
+    ],
+    "Avobenzone, Octisalate And Octocrylene": [
+        {
+            "name": "Lancome Paris Renergie Hpn 300 Peptide Broad Spectrum Spf 25 Sunscreen",
+            "price": 28.49,
+            "quantity": 74
+        },
+        {
+            "name": "Lancome Paris High Resolution Refill 3X Triple Action Renewal Anti Wrinkle Broad Spectrum Spf 15 Sunscreen",
+            "price": 28.86,
+            "quantity": 94
+        }
+    ],
+    "Methylprednisolone Acetate, Lidocaine Hydrochloride, Bupivacaine Hydrochloride, Povidine Iodine, Sodium Chloride, Isopropyl Alcohol": [
+        {
+            "name": "Dyural 40 Kit",
+            "price": 16.21,
+            "quantity": 91
+        },
+        {
+            "name": "Dyural 80 Kit",
+            "price": 27.83,
+            "quantity": 14
+        }
+    ],
+    "Zinc Oxide, Titanium Dioxide": [
+        {
+            "name": "Dr.Jart Cicapair Tiger Grass Camo Drops",
+            "price": 16.36,
+            "quantity": 55
+        },
+        {
+            "name": "Dr.Jart Cicapair Tiger Grass Color Correcting Treatment",
+            "price": 24.12,
+            "quantity": 68
+        },
+        {
+            "name": "G.M. Collin Fps-Spf 45 Uva-Uvb Tinted Sunscreen",
+            "price": 21.97,
+            "quantity": 56
+        },
+        {
+            "name": "Josie Maran Argan Daily Moisturizer Spf47",
+            "price": 35.88,
+            "quantity": 95
+        }
+    ],
+    "Cetirizine Hcl": [
+        {
+            "name": "All Day Allergy",
+            "price": 24.65,
+            "quantity": 12
+        },
+        {
+            "name": "Childrens Allergy Relief",
+            "price": 34.75,
+            "quantity": 83
+        }
+    ],
+    "Loperamide Hydrochloride": [
+        {
+            "name": "Imodium A-D",
+            "price": 43.91,
+            "quantity": 80
+        },
+        {
+            "name": "Loperamide Hydrochloride",
+            "price": 36.93,
+            "quantity": 59
+        }
+    ],
+    "Nicotine": [
+        {
+            "name": "Nicorette Fruit Chill Nicotine Polacrilex",
+            "price": 38.14,
+            "quantity": 27
+        },
+        {
+            "name": "Nicotine",
+            "price": 37.62,
+            "quantity": 100
+        }
+    ],
+    "Benzalkonium Chloride 0.13%": [
+        {
+            "name": "Dk12 Liquid Hand Oatmeal",
+            "price": 41.31,
+            "quantity": 11
+        },
+        {
+            "name": "Dk12 Liquid Hand Fresh Energy",
+            "price": 11.95,
+            "quantity": 10
+        },
+        {
+            "name": "Dk12 Liquid Hand Creamy",
+            "price": 19.33,
+            "quantity": 22
+        },
+        {
+            "name": "Jabonito Kids Green Apple Liquid",
+            "price": 40.45,
+            "quantity": 96
+        }
+    ],
+    "Camphor, Eucalyptus Oil, Menthol": [
+        {
+            "name": "Equate Rub",
+            "price": 31.47,
+            "quantity": 85
+        },
+        {
+            "name": "Cvs Health Medicated Chest Rub",
+            "price": 43.63,
+            "quantity": 80
+        }
+    ],
+    "Zolpidem Tartrate": [
+        {
+            "name": "Zolpidem",
+            "price": 9.24,
+            "quantity": 81
+        },
+        {
+            "name": "Zolpidem Tartrate",
+            "price": 47.61,
+            "quantity": 14
+        }
+    ],
+    "Tazarotene": [
+        {
+            "name": "Tazorac",
+            "price": 13.22,
+            "quantity": 73
+        },
+        {
+            "name": "Tazarotene",
+            "price": 8.06,
+            "quantity": 48
+        }
+    ],
+    "Oxycodone And Acetaminophen": [
+        {
+            "name": "Oxycodone And Acetaminophen",
+            "price": 8.45,
+            "quantity": 37
+        },
+        {
+            "name": "Endocet",
+            "price": 34.57,
+            "quantity": 76
+        }
+    ],
+    "Phytonadione": [
+        {
+            "name": "Phytonadione Phytonadione",
+            "price": 9.33,
+            "quantity": 36
+        },
+        {
+            "name": "Phytonadione",
+            "price": 17.55,
+            "quantity": 73
+        }
+    ],
+    "Colloidal Oatmeal": [
+        {
+            "name": "Olay Sensitive Soothing Moisturizer Skin Protectant Fragrance-Free",
+            "price": 10.69,
+            "quantity": 85
+        },
+        {
+            "name": "Cetaphil Eczema Rapid Relief Cream",
+            "price": 16.29,
+            "quantity": 95
+        }
+    ],
+    "Acetaminophen, Caffeine": [
+        {
+            "name": "Cafizetamol Forte",
+            "price": 13.53,
+            "quantity": 53
+        },
+        {
+            "name": "Migrafein Forte",
+            "price": 29.6,
+            "quantity": 27
+        },
+        {
+            "name": "Neo-Lubrina Fuerte",
+            "price": 8.96,
+            "quantity": 19
+        }
+    ],
+    "Zinc Oxide, Titanium Dioxide, Octinoxate, Octisalate": [
+        {
+            "name": "Dr.Jart Premium Beauty Balm Fair-Light",
+            "price": 25.78,
+            "quantity": 28
+        },
+        {
+            "name": "Dr.Jart Premium Beauty Balm Light Medium-Medium",
+            "price": 28.3,
+            "quantity": 57
+        },
+        {
+            "name": "Dr.Jart Premium Beauty Balm Medium-Tan",
+            "price": 8.11,
+            "quantity": 73
+        }
+    ]
+}

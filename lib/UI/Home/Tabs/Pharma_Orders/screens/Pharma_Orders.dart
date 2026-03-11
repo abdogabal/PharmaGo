@@ -22,12 +22,12 @@ class _PharmaOrdersState extends State<PharmaOrders> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          StringsManger.pharmacies.tr(),
+          "orders".tr(),
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
       body: StreamBuilder(
-        stream: SupabaseHandler.getPharmaOrderStream(userProvider.myUser?.pharma??''),
+        stream: SupabaseHandler.getPharmaOrderStream(userProvider.myUser?.pharma ?? ''),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
