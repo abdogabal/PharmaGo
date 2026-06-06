@@ -100,7 +100,14 @@ class SupabaseHandler {
       return [];
     }
     final data = await supabase.from('order_items').select().eq('order_id', orderId);
-    return data.map((map) => Medic.fromJson(map)).toList();
+    return data.map((map) {
+      return Medic(
+        id: map['medicine_id'],
+        name: map['name'],
+        price: (map['price'] as num?)?.toDouble(),
+        quantity: (map['quantity'] as num?)?.toDouble(),
+      );
+    }).toList();
   }
 
   static Future<void> makeOrder(
@@ -117,18 +124,47 @@ class SupabaseHandler {
   }
 
   static Future<void> checkOrder(bool finish, String id) async {
+    // Stock deduction is now handled purely by the Supabase Database Trigger
     await supabase.from('orders').update({'finish': finish}).eq('id', id);
   }
 
-  // --- Image Uploads ---
+  static Future<void> refuseOrder(String id) async {
+    // Fetch the order to get the prescription URL before deleting
+    final orderData = await supabase.from('orders').select('is_prescription, prescription_url').eq('id', id).maybeSingle();
+
+    // Delete the order items first (if no cascade delete)
+    await supabase.from('order_items').delete().eq('order_id', id);
+    // Then delete the order itself
+    await supabase.from('orders').delete().eq('id', id);
+
+    // If it has a prescription image, delete it from storage
+    if (orderData != null && orderData['is_prescription'] == true && orderData['prescription_url'] != null) {
+      String url = orderData['prescription_url'].toString();
+      Uri uri = Uri.parse(url);
+      String path = uri.path; 
+      String storagePrefix = 'object/public/prescriptions/';
+      int prefixIndex = path.indexOf(storagePrefix);
+      
+      if (prefixIndex != -1) {
+        String fileName = path.substring(prefixIndex + storagePrefix.length);
+        fileName = Uri.decodeComponent(fileName); // Decode any URL-encoded characters
+        
+        final List<FileObject> deletedFiles = await supabase.storage.from('prescriptions').remove([fileName]);
+        if (deletedFiles.isEmpty) {
+          throw Exception("Storage RLS blocked deletion or file not found.");
+        }
+      }
+    }
+  }
+
   static Future<String> uploadPharmacyImage(File imageFile, String fileName) async {
-    final String path = await supabase.storage.from('pharmacies').upload(fileName, imageFile);
-    return supabase.storage.from('pharmacies').getPublicUrl(path);
+    await supabase.storage.from('prescriptions').upload(fileName, imageFile);
+    return supabase.storage.from('prescriptions').getPublicUrl(fileName);
   }
 
   static Future<String> uploadMedicineImage(File imageFile, String fileName) async {
-    final String path = await supabase.storage.from('medicines').upload(fileName, imageFile);
-    return supabase.storage.from('medicines').getPublicUrl(path);
+    await supabase.storage.from('prescriptions').upload(fileName, imageFile);
+    return supabase.storage.from('prescriptions').getPublicUrl(fileName);
   }
 
   static Future<String> uploadPrescriptionImage(File imageFile, String fileName) async {

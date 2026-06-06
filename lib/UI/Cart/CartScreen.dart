@@ -74,12 +74,23 @@ class CartScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(10),
+                            width: 60,
+                            height: 60,
                             decoration: BoxDecoration(
                               color: Colors.teal.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: const Icon(Icons.medical_services, color: Colors.teal, size: 40),
+                            child: (cartItem.medic.imageUrl != null && cartItem.medic.imageUrl!.isNotEmpty)
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      cartItem.medic.imageUrl!,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) =>
+                                          const Icon(Icons.medical_services, color: Colors.teal, size: 30),
+                                    ),
+                                  )
+                                : const Icon(Icons.medical_services, color: Colors.teal, size: 30),
                           ),
                           const SizedBox(width: 15),
                           Expanded(

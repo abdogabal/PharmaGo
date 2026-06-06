@@ -13,7 +13,8 @@ class Order {
   double? longitude;
   double? fullPrice;
   bool? finish;
-  String? prescriptionImage;
+  String? prescriptionUrl;
+  bool? isPrescription;
 
   Order({
     this.id,
@@ -28,7 +29,8 @@ class Order {
     this.time,
     this.longitude,
     this.latitude,
-    this.prescriptionImage,
+    this.prescriptionUrl,
+    this.isPrescription,
   });
 
   Order.fromJson(Map<String, dynamic>? data) {
@@ -49,7 +51,8 @@ class Order {
     
     latitude = (data?['latitude'] as num?)?.toDouble();
     longitude = (data?['longitude'] as num?)?.toDouble();
-    prescriptionImage = data?['prescriptionImage'];
+    prescriptionUrl = data?['prescription_url'];
+    isPrescription = data?['is_prescription'] as bool?;
   }
 
   Map<String, dynamic> toJson() {
@@ -67,6 +70,8 @@ class Order {
       "full_price": fullPrice,
       "finish": finish,
       "created_at": time?.toIso8601String(),
+      "prescription_url": prescriptionUrl,
+      "is_prescription": isPrescription,
     };
   }
 }

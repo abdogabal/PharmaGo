@@ -53,12 +53,24 @@ class _MedicItemsState extends State<MedicItems> {
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(12),
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
                 color: Colors.teal.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.medical_services, color: Colors.teal, size: 30),
+              child: widget.medic.imageUrl != null && widget.medic.imageUrl!.isNotEmpty
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        widget.medic.imageUrl!,
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const Center(child: Icon(Icons.medical_services, color: Colors.teal, size: 30)),
+                      ),
+                    )
+                  : const Center(child: Icon(Icons.medical_services, color: Colors.teal, size: 30)),
             ),
             const SizedBox(width: 15),
             Expanded(

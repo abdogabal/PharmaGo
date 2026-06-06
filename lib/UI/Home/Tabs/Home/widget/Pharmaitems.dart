@@ -47,13 +47,15 @@ class _PharmaItemsState extends State<PharmaItems> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: SvgPicture.asset(
-                AssetsManger.logo,
-                colorFilter: ColorFilter.mode(
-                  ColorManger.green,
-                  BlendMode.srcIn,
-                ),
-              ),
+              child: widget.pharma.imageUrl != null && widget.pharma.imageUrl!.isNotEmpty
+                  ? Image.network(
+                      widget.pharma.imageUrl!,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => _buildFallbackLogo(),
+                    )
+                  : _buildFallbackLogo(),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,6 +111,18 @@ class _PharmaItemsState extends State<PharmaItems> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildFallbackLogo() {
+    return SvgPicture.asset(
+      AssetsManger.logo,
+      width: 50,
+      height: 50,
+      colorFilter: ColorFilter.mode(
+        ColorManger.green,
+        BlendMode.srcIn,
       ),
     );
   }

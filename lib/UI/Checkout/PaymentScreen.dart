@@ -410,6 +410,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         fullPrice: cart.totalAmount,
         finish: false,
         time: DateTime.now(),
+        isPrescription: false,
       );
 
       // Create a list of Medic items from cart

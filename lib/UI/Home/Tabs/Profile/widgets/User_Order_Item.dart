@@ -42,7 +42,7 @@ class _UserOrderItemState extends State<UserOrderItem> {
                 }
                 
                 final items = snapshot.data ?? [];
-                if (items.isEmpty) {
+                if (items.isEmpty && widget.order.prescriptionUrl == null) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -128,6 +128,54 @@ class _UserOrderItemState extends State<UserOrderItem> {
                           ),
                         ),
                       const SizedBox(height: 15),
+                      if (widget.order.isPrescription == true && widget.order.prescriptionUrl != null)
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                backgroundColor: Colors.transparent,
+                                insetPadding: const EdgeInsets.all(10),
+                                child: Stack(
+                                  alignment: Alignment.topRight,
+                                  children: [
+                                    InteractiveViewer(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(widget.order.prescriptionUrl!, fit: BoxFit.contain),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.grey.shade300),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Positioned.fill(child: Image.network(widget.order.prescriptionUrl!, fit: BoxFit.cover)),
+                                  Container(color: Colors.black.withOpacity(0.3)),
+                                  const Icon(Icons.zoom_in, color: Colors.white, size: 40),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (widget.order.isPrescription == true && widget.order.prescriptionUrl != null)
+                        const SizedBox(height: 15),
                       const Divider(),
                       Expanded(
                         child: ListView.separated(
@@ -184,6 +232,17 @@ class _UserOrderItemState extends State<UserOrderItem> {
                         ),
                       ),
                     ),
+                    ElevatedButton.icon(
+                      onPressed: () => _reorder(context),
+                      icon: const Icon(Icons.refresh, size: 16),
+                      label: const Text('Reorder'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        textStyle: const TextStyle(fontSize: 14),
+                      ),
+                    ),
                   ],
                 ),
                 if (widget.order.time != null) ...[
@@ -205,5 +264,55 @@ class _UserOrderItemState extends State<UserOrderItem> {
         ],
       ),
     );
+  }
+
+  Future<void> _reorder(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext c) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+
+    try {
+      final items = await SupabaseHandler.getMedicinesForOrder(widget.order.id ?? '');
+      
+      if (items.isEmpty && widget.order.prescriptionUrl == null) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+           const SnackBar(content: Text('Cannot reorder: No items or prescription found.')),
+        );
+        return;
+      }
+
+      Order newOrder = Order(
+        userID: widget.order.userID,
+        userName: widget.order.userName,
+        userNum: widget.order.userNum,
+        pharmaID: widget.order.pharmaID,
+        pharmaName: widget.order.pharmaName,
+        pharmaNum: widget.order.pharmaNum,
+        fullPrice: widget.order.fullPrice,
+        finish: false,
+        time: DateTime.now(),
+        prescriptionUrl: widget.order.prescriptionUrl,
+        isPrescription: widget.order.isPrescription,
+        latitude: widget.order.latitude,
+        longitude: widget.order.longitude,
+      );
+
+      await SupabaseHandler.makeOrder(newOrder, items);
+
+      Navigator.pop(context); // Close loading
+      ScaffoldMessenger.of(context).showSnackBar(
+         const SnackBar(content: Text('Order duplicated successfully!')),
+      );
+    } catch (e) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(content: Text('Failed to reorder: $e')),
+      );
+    }
   }
 }

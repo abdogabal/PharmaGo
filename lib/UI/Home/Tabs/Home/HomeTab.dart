@@ -217,7 +217,7 @@ class _HomeTapState extends State<HomeTap> {
         Navigator.pushNamed(context, PharmacyScreen.routeName, arguments: pharma);
       },
       child: Container(
-        padding: const EdgeInsets.all(12),
+        clipBehavior: Clip.antiAlias,
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -231,37 +231,55 @@ class _HomeTapState extends State<HomeTap> {
             )
           ],
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.teal.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(Icons.local_pharmacy, color: Colors.teal, size: 30),
-            ),
-            const SizedBox(width: 15),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            if (pharma.imageUrl != null && pharma.imageUrl!.isNotEmpty)
+              Image.network(
+                pharma.imageUrl!,
+                height: 140,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => _buildPlaceholder(),
+              )
+            else
+              _buildPlaceholder(),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
                 children: [
-                  Text(pharma.title ?? "",
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(Icons.star, color: Colors.orange, size: 14),
-                      const SizedBox(width: 4),
-                      Text("4.5", style: TextStyle(color: Colors.grey.shade700, fontSize: 12)),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(pharma.title ?? "",
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const Icon(Icons.star, color: Colors.orange, size: 14),
+                            const SizedBox(width: 4),
+                            Text("4.5", style: TextStyle(color: Colors.grey.shade700, fontSize: 12)),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
+                  const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    return Container(
+      height: 140,
+      color: Colors.teal.withOpacity(0.1),
+      child: const Center(
+        child: Icon(Icons.local_pharmacy, color: Colors.teal, size: 50),
       ),
     );
   }

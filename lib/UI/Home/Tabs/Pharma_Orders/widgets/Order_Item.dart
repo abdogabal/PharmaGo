@@ -42,7 +42,7 @@ class _OrderItemState extends State<OrderItem> {
                 }
                 
                 final items = snapshot.data ?? [];
-                if (items.isEmpty) {
+                if (items.isEmpty && widget.order.prescriptionUrl == null) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -128,6 +128,54 @@ class _OrderItemState extends State<OrderItem> {
                           ),
                         ),
                       const SizedBox(height: 15),
+                      if (widget.order.isPrescription == true && widget.order.prescriptionUrl != null)
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                backgroundColor: Colors.transparent,
+                                insetPadding: const EdgeInsets.all(10),
+                                child: Stack(
+                                  alignment: Alignment.topRight,
+                                  children: [
+                                    InteractiveViewer(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(widget.order.prescriptionUrl!, fit: BoxFit.contain),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.grey.shade300),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Positioned.fill(child: Image.network(widget.order.prescriptionUrl!, fit: BoxFit.cover)),
+                                  Container(color: Colors.black.withOpacity(0.3)),
+                                  const Icon(Icons.zoom_in, color: Colors.white, size: 40),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (widget.order.isPrescription == true && widget.order.prescriptionUrl != null)
+                        const SizedBox(height: 15),
                       const Divider(),
                       Expanded(
                         child: ListView.separated(
@@ -218,13 +266,48 @@ class _OrderItemState extends State<OrderItem> {
                 Checkbox(
                   activeColor: ColorManger.green,
                   value: widget.order.finish ?? false, 
-                  onChanged: (value) {
+                  onChanged: (widget.order.finish == true) ? null : (value) {
                     setState(() {
                       widget.order.finish = value;
                     });
                     SupabaseHandler.checkOrder(value ?? false, widget.order.id ?? '');
                   },
-                )
+                ),
+                IconButton(
+                  icon: const Icon(Icons.cancel, color: Colors.red),
+                  tooltip: 'Refuse Order',
+                  onPressed: () async {
+                    bool? confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: const Text('Refuse Order'),
+                        content: const Text('Are you sure you want to refuse and delete this order?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(ctx, false),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(ctx, true),
+                            child: const Text('Refuse', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (confirm == true) {
+                      try {
+                        await SupabaseHandler.refuseOrder(widget.order.id ?? '');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Order has been refused and deleted.')),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error refusing order: $e')),
+                        );
+                      }
+                    }
+                  },
+                ),
               ],
             ),
             const Divider(),

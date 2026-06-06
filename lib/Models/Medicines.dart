@@ -40,7 +40,9 @@ double? price;
     if (id != null) {
       map["id"] = id;
     }
-    // Omit image_url since the column doesn't exist in Supabase
+    if (imageUrl != null) {
+      map["image_url"] = imageUrl;
+    }
     return map;
   }
 }

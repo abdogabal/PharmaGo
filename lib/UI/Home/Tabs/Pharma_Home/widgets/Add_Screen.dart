@@ -10,6 +10,8 @@ import '../../../../../Models/Medicines.dart';
 import '../../../../../Providers/UserProvider.dart';
 import '../../../../../core/DialogUtils.dart';
 import '../../../../../core/Reusable_component/CustomButton.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class AddScreen extends StatefulWidget {
   static const String routeName = 'Add';
@@ -26,6 +28,17 @@ class _AddScreenState extends State<AddScreen> {
   late TextEditingController priceController;
   late TextEditingController quantityController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _selectedImage = File(image.path);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -66,6 +79,32 @@ class _AddScreenState extends State<AddScreen> {
               key: formKey,
               child: Column(
                 children: [
+                  SizedBox(height: 24.h),
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      height: 120.h,
+                      width: 120.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: _selectedImage != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.file(_selectedImage!, fit: BoxFit.cover),
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add_a_photo, color: Colors.grey.shade500, size: 40),
+                                SizedBox(height: 8.h),
+                                Text('Add Image', style: TextStyle(color: Colors.grey.shade600, fontSize: 12.sp)),
+                              ],
+                            ),
+                    ),
+                  ),
                   SizedBox(height: 24.h),
                   CustomTextField(
                     validate: (value) {
@@ -126,6 +165,13 @@ class _AddScreenState extends State<AddScreen> {
                       onClick: () async {
                         if (formKey.currentState?.validate() ?? false) {
                           try {
+                            DialogUtils.showLoading(context);
+                            String? uploadedUrl;
+                            if (_selectedImage != null) {
+                              String fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+                              uploadedUrl = await SupabaseHandler.uploadMedicineImage(_selectedImage!, fileName);
+                            }
+
                             await SupabaseHandler.addMedic(
                               Medic(
                                 name: nameController.text,
@@ -136,17 +182,19 @@ class _AddScreenState extends State<AddScreen> {
                                 quantity: double.tryParse(
                                   quantityController.text ?? '',
                                 ),
+                                imageUrl: uploadedUrl,
                               ),
                               userProvider.myUser?.pharma ?? '',
                             );
-
+                            Navigator.pop(context);
                             DialogUtils.showSnackBar(
                               StringsManger.success.tr(),
                             );
                             Navigator.pop(context);
                           } catch (error) {
                             Navigator.pop(context);
-                            DialogUtils.showSnackBar(error.toString());                          }
+                            DialogUtils.showSnackBar(error.toString());
+                          }
                         }
                       },
                     ),

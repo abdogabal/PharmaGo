@@ -10,6 +10,8 @@ import '../../../../../core/DialogUtils.dart';
 import '../../../../../core/SupabaseHandler.dart';
 import '../../../../../core/Reusable_component/CustomButton.dart';
 import '../../../../../core/Reusable_component/CustomTextField.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class EditScreen extends StatefulWidget {
   static const String routeName = 'edit';
@@ -27,6 +29,17 @@ class _EditScreenState extends State<EditScreen> {
   late TextEditingController priceController;
   late TextEditingController quantityController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _selectedImage = File(image.path);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -73,6 +86,37 @@ class _EditScreenState extends State<EditScreen> {
               key: formKey,
               child: Column(
                 children: [
+                  SizedBox(height: 24.h),
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      height: 120.h,
+                      width: 120.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: _selectedImage != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.file(_selectedImage!, fit: BoxFit.cover),
+                            )
+                          : (medic.imageUrl != null && medic.imageUrl!.isNotEmpty)
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(medic.imageUrl!, fit: BoxFit.cover),
+                                )
+                              : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add_a_photo, color: Colors.grey.shade500, size: 40),
+                                    SizedBox(height: 8.h),
+                                    Text('Change Image', style: TextStyle(color: Colors.grey.shade600, fontSize: 12.sp)),
+                                  ],
+                                ),
+                    ),
+                  ),
                   SizedBox(height: 24.h),
                   CustomTextField(
                     validate: (value) {
@@ -133,6 +177,18 @@ class _EditScreenState extends State<EditScreen> {
                       onClick: () async {
                         if (formKey.currentState?.validate() ?? false) {
                           try {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (c) => const Center(child: CircularProgressIndicator()),
+                            );
+
+                            String? uploadedUrl = medic.imageUrl;
+                            if (_selectedImage != null) {
+                              String fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+                              uploadedUrl = await SupabaseHandler.uploadMedicineImage(_selectedImage!, fileName);
+                            }
+
                             await SupabaseHandler.editMedic(
                               Medic(
                                 id: medic.id,
@@ -144,14 +200,16 @@ class _EditScreenState extends State<EditScreen> {
                                 quantity: double.tryParse(
                                   quantityController.text ?? '',
                                 ),
+                                imageUrl: uploadedUrl,
                               ),
                               userProvider.myUser?.pharma ?? '',
                             );
 
+                            Navigator.pop(context); // close loading
                             DialogUtils.showSnackBar(
                               StringsManger.success.tr(),
                             );
-                            Navigator.pop(context);
+                            Navigator.pop(context); // close screen
                           } catch (error) {
                             Navigator.pop(context);
                             DialogUtils.showSnackBar(error.toString());
