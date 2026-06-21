@@ -173,21 +173,22 @@ late Pharma pharma;
               ),
             );
           }
-          return Padding(
+          return ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildPharmacyHeader(),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => MedicItems(filteredMedicines[index], isOwner: isOwner, pharmaId: pharma.id),
-                    itemCount: filteredMedicines.length,
-                  ),
-                ),
-              ],
-            ),
+            itemCount: filteredMedicines.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: _buildPharmacyHeader(),
+                );
+              }
+              return MedicItems(
+                filteredMedicines[index - 1],
+                isOwner: isOwner,
+                pharmaId: pharma.id,
+              );
+            },
           );
         },
       ),
