@@ -24,6 +24,7 @@ import 'UI/Home/Tabs/Calendar/remainder_Screen.dart';
 import 'UI/splash/screens/splash_screen.dart';
 import 'UI/Cart/CartScreen.dart';
 import 'UI/Checkout/PaymentScreen.dart';
+import 'UI/Home/Tabs/Home/ScanPrescriptionScreen.dart';
 import 'core/PrefsManager.dart';
 import 'core/Reusable_component/notification_handler.dart';
 import 'core/resources/AppStyle.dart';
@@ -92,6 +93,7 @@ class MyApp extends StatelessWidget {
             MedicationListScreen.routeName: (_)=>MedicationListScreen(),
             CartScreen.routeName: (_)=>CartScreen(),
             PaymentScreen.routeName: (_)=>PaymentScreen(),
+            ScanPrescriptionScreen.routeName: (_)=>ScanPrescriptionScreen(),
           },
           initialRoute: SplashScreen.routeName,
         );

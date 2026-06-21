@@ -26,6 +26,13 @@ class HomeTap extends StatefulWidget {
 
 class _HomeTapState extends State<HomeTap> {
   String searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +45,13 @@ class _HomeTapState extends State<HomeTap> {
         title: const Text("Pharmacy",
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
         centerTitle: true,
-        actions: [],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.document_scanner, color: Colors.teal),
+            tooltip: "Scan Prescription",
+            onPressed: () => Navigator.pushNamed(context, "scan_prescription"),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
@@ -47,6 +60,7 @@ class _HomeTapState extends State<HomeTap> {
           children: [
             /// 1. Search Bar
             TextField(
+              controller: _searchController,
               onChanged: (value) {
                 setState(() {
                   searchQuery = value.toLowerCase();
@@ -334,10 +348,10 @@ class _HomeTapState extends State<HomeTap> {
 
     try {
       File imageFile = File(image.path);
-      // Use the emulator local ip if testing on Android Simulator, or the specific Wi-Fi IP
-      // var uri = Uri.parse('http://10.0.2.2:8000/predict'); // Default to emulator localhost
-      var uri = Uri.parse('http://192.168.1.8:8000/predict'); // For physical device, uncomment and change
+      // Use Hugging Face Space API
+      var uri = Uri.parse('https://eyadsakr11-trocr-prescription-reader.hf.space/predict');
       var request = http.MultipartRequest('POST', uri);
+      request.headers['Authorization'] = 'Bearer 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';
       
       request.files.add(await http.MultipartFile.fromPath(
         'file', 
@@ -362,24 +376,82 @@ class _HomeTapState extends State<HomeTap> {
           context: context,
           builder: (BuildContext c) {
             return AlertDialog(
-              title: const Text("Prescription Read Successfully!"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                   const Text("The AI Model found these likely medicines:"),
-                   const SizedBox(height: 10),
-                   ...matches.map((m) => Padding(
-                     padding: const EdgeInsets.symmetric(vertical: 4.0),
-                     child: Text("• $m", style: const TextStyle(fontWeight: FontWeight.bold)),
-                   )).toList(),
-                ],
+               title: const Text("Prescription Read Successfully!"),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                     const Text("The AI Model found these likely medicines:"),
+                     const SizedBox(height: 10),
+                     ...matches.map((m) {
+                       String name = m;
+                       String activeIng = "";
+                       if (m.contains("(Active: ")) {
+                         var parts = m.split("(Active: ");
+                         name = parts[0].trim();
+                         var rest = parts[1];
+                         var ingParts = rest.split(")");
+                         activeIng = ingParts[0].trim();
+                       } else if (m.contains(" ->")) {
+                         var parts = m.split(" ->");
+                         name = parts[0].trim();
+                       }
+                       
+                       return Padding(
+                         padding: const EdgeInsets.symmetric(vertical: 8.0),
+                         child: Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             Text("• $m", style: const TextStyle(fontWeight: FontWeight.bold)),
+                             const SizedBox(height: 4),
+                             Wrap(
+                               spacing: 8.0,
+                               runSpacing: 4.0,
+                               children: [
+                                 TextButton.icon(
+                                   icon: const Icon(Icons.search, size: 16),
+                                   label: Text(name),
+                                   style: TextButton.styleFrom(
+                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                     minimumSize: Size.zero,
+                                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                   ),
+                                   onPressed: () {
+                                     setState(() {
+                                       searchQuery = name.toLowerCase();
+                                       _searchController.text = name;
+                                     });
+                                     Navigator.pop(c);
+                                   },
+                                 ),
+                                 if (activeIng.isNotEmpty && activeIng != "Unknown")
+                                   TextButton.icon(
+                                     icon: const Icon(Icons.science, size: 16),
+                                     label: Text(activeIng),
+                                     style: TextButton.styleFrom(
+                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                       minimumSize: Size.zero,
+                                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                     ),
+                                     onPressed: () {
+                                       setState(() {
+                                         searchQuery = activeIng.toLowerCase();
+                                         _searchController.text = activeIng;
+                                       });
+                                       Navigator.pop(c);
+                                     },
+                                   ),
+                               ],
+                             ),
+                           ],
+                         ),
+                       );
+                     }).toList(),
+                  ],
+                ),
               ),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(c),
-                  child: const Text("Search Medicine"),
-                ),
                 TextButton(
                   onPressed: () => Navigator.pop(c),
                   child: const Text("Close"),
