@@ -377,78 +377,84 @@ class _HomeTapState extends State<HomeTap> {
           builder: (BuildContext c) {
             return AlertDialog(
                title: const Text("Prescription Read Successfully!"),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                     const Text("The AI Model found these likely medicines:"),
-                     const SizedBox(height: 10),
-                     ...matches.map((m) {
-                       String name = m;
-                       String activeIng = "";
-                       if (m.contains("(Active: ")) {
-                         var parts = m.split("(Active: ");
-                         name = parts[0].trim();
-                         var rest = parts[1];
-                         var ingParts = rest.split(")");
-                         activeIng = ingParts[0].trim();
-                       } else if (m.contains(" ->")) {
-                         var parts = m.split(" ->");
-                         name = parts[0].trim();
-                       }
-                       
-                       return Padding(
-                         padding: const EdgeInsets.symmetric(vertical: 8.0),
-                         child: Column(
-                           crossAxisAlignment: CrossAxisAlignment.start,
-                           children: [
-                             Text("• $m", style: const TextStyle(fontWeight: FontWeight.bold)),
-                             const SizedBox(height: 4),
-                             Wrap(
-                               spacing: 8.0,
-                               runSpacing: 4.0,
+              content: SizedBox(
+                width: double.maxFinite,
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                         const Text("The AI Model found these likely medicines:"),
+                         const SizedBox(height: 10),
+                         ...matches.map((m) {
+                           String name = m;
+                           String activeIng = "";
+                           if (m.contains("(Active: ")) {
+                             var parts = m.split("(Active: ");
+                             name = parts[0].trim();
+                             var rest = parts[1];
+                             var ingParts = rest.split(")");
+                             activeIng = ingParts[0].trim();
+                           } else if (m.contains(" ->")) {
+                             var parts = m.split(" ->");
+                             name = parts[0].trim();
+                           }
+                           
+                           return Padding(
+                             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                             child: Column(
+                               crossAxisAlignment: CrossAxisAlignment.start,
                                children: [
-                                 TextButton.icon(
-                                   icon: const Icon(Icons.search, size: 16),
-                                   label: Text(name),
-                                   style: TextButton.styleFrom(
-                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                     minimumSize: Size.zero,
-                                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                   ),
-                                   onPressed: () {
-                                     setState(() {
-                                       searchQuery = name.toLowerCase();
-                                       _searchController.text = name;
-                                     });
-                                     Navigator.pop(c);
-                                   },
-                                 ),
-                                 if (activeIng.isNotEmpty && activeIng != "Unknown")
-                                   TextButton.icon(
-                                     icon: const Icon(Icons.science, size: 16),
-                                     label: Text(activeIng),
-                                     style: TextButton.styleFrom(
-                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                       minimumSize: Size.zero,
-                                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                 Text("• $m", style: const TextStyle(fontWeight: FontWeight.bold)),
+                                 const SizedBox(height: 4),
+                                 Wrap(
+                                   spacing: 8.0,
+                                   runSpacing: 4.0,
+                                   children: [
+                                     TextButton.icon(
+                                       icon: const Icon(Icons.search, size: 16),
+                                       label: Text(name),
+                                       style: TextButton.styleFrom(
+                                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                         minimumSize: Size.zero,
+                                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                       ),
+                                       onPressed: () {
+                                         setState(() {
+                                           searchQuery = name.toLowerCase();
+                                           _searchController.text = name;
+                                         });
+                                         Navigator.pop(c);
+                                       },
                                      ),
-                                     onPressed: () {
-                                       setState(() {
-                                         searchQuery = activeIng.toLowerCase();
-                                         _searchController.text = activeIng;
-                                       });
-                                       Navigator.pop(c);
-                                     },
-                                   ),
+                                     if (activeIng.isNotEmpty && activeIng != "Unknown")
+                                       TextButton.icon(
+                                         icon: const Icon(Icons.science, size: 16),
+                                         label: Text(activeIng),
+                                         style: TextButton.styleFrom(
+                                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                           minimumSize: Size.zero,
+                                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                         ),
+                                         onPressed: () {
+                                           setState(() {
+                                             searchQuery = activeIng.toLowerCase();
+                                             _searchController.text = activeIng;
+                                           });
+                                           Navigator.pop(c);
+                                         },
+                                       ),
+                                   ],
+                                 ),
                                ],
                              ),
-                           ],
-                         ),
-                       );
-                     }).toList(),
-                  ],
+                           );
+                         }).toList(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               actions: [
